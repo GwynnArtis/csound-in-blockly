@@ -1,0 +1,9 @@
+
+#blocklyArea { /*resizable blockly*/
+    width: 80%;
+    height: 80%;
+    background: rgb(67, 120, 255);
+    text-align: center;
+    position: absolute;
+  }
+
