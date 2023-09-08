@@ -1,34 +1,40 @@
 const toolbox = {
-    "kind": "flyoutToolbox",
+    "kind": "categoryToolbox",
     "contents": [
       {
-        "kind": "block",
-        "type": "controls_if"
+        "kind": "category",
+        "name": "Oscillators",
+        "contents": [
+          {
+            "kind": "block", // need to create custom blocks 
+            "type": "controls_if"
+          },
+        ]
       },
       {
-        "kind": "block",
-        "type": "controls_repeat_ext"
+        "kind": "category",
+        "name": "Envelopes",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "logic_operation"
+          },
+          {
+            "kind": "block",
+            "type": "logic_boolean"
+          }
+        ]
       },
       {
-        "kind": "block",
-        "type": "logic_compare"
-      },
-      {
-        "kind": "block",
-        "type": "math_number"
-      },
-      {
-        "kind": "block",
-        "type": "math_arithmetic"
-      },
-      {
-        "kind": "block",
-        "type": "text"
-      },
-      {
-        "kind": "block",
-        "type": "text_print"
-      },
+        "kind": "category",
+        "name": "Filters",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "string_length"
+          },
+        ]
+      }
     ]
   }
 
