@@ -8,11 +8,29 @@
     <script src="custom_blocks.js"></script>
     <script src="main.js"></script>
 
+    <script src="csound_linker.js"></script>
 </head>
 
 <body>
+    <!-- csound linker - test using Ping example -->
+    <!-- <h1>Csound Test Cases</h1>
+    <div id="click for ping" onclick="play()"> 
+        <h1>Pink</h1>
+        <p>Click here to hear a sound</p>
+    </div> -->
+    <!-- <button onclick="play()">Click me</button> -->
+    <h1>Test play</h1>
+    <p>
+        <input type="button" id="play" onclick="start()" value=">">
+        </input>
+        <input type="button" id="pause" onclick="pause()" value="||">
+        </input>
+    </p>
+
+    <h1>BlockSound</h1>
     <div id="blocklyArea">Blockly here</div>
     <div id="blocklyDiv" style="position: absolute"></div>
+
 </body>
 
 </html>
