@@ -23,11 +23,11 @@ async function start() {
 let count = 0;
 function handleMessage(message) {
     let element = document.getElementById('console');
-    element.innerHTML += message + '\n';
+    element.value += message + '\n';
     element.scrollTop = 99999;
     if (count == 1000) {
         count = 0;
-        element.innerHTML == "";
+        element.value == "";
     }
     count += 1;
 };

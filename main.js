@@ -3,11 +3,29 @@ const toolbox = {
     "contents": [
       {
         "kind": "category",
+        "name": "General",
+        "contents": [
+          {
+            "kind": "block", // need to create custom blocks 
+            "type": "instrument"
+          },
+          {
+            "kind": "block",
+            "type": "performance"
+          }
+        ]
+      },
+      {
+        "kind": "category",
         "name": "Oscillators",
         "contents": [
           {
             "kind": "block", // need to create custom blocks 
-            "type": "controls_if"
+            "type": "oscili"
+          },
+          {
+            "kind": "block", // need to create custom blocks 
+            "type": "vco2"
           },
         ]
       },
@@ -32,6 +50,16 @@ const toolbox = {
           {
             "kind": "block",
             "type": "string_length"
+          },
+        ]
+      },
+      {
+        "kind": "category",
+        "name": "Variables",
+        "contents": [
+          {
+            "kind": "block",
+            "type": "variables_get"
           },
         ]
       }
