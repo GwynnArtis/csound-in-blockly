@@ -1,76 +1,19 @@
-const toolbox = {
-    "kind": "categoryToolbox",
-    "contents": [
-      {
-        "kind": "category",
-        "name": "General",
-        "contents": [
-          {
-            "kind": "block", // need to create custom blocks 
-            "type": "instrument"
-          },
-          {
-            "kind": "block",
-            "type": "performance"
-          }
-        ]
-      },
-      {
-        "kind": "category",
-        "name": "Oscillators",
-        "contents": [
-          {
-            "kind": "block", // need to create custom blocks 
-            "type": "oscili"
-          },
-          {
-            "kind": "block", // need to create custom blocks 
-            "type": "vco2"
-          },
-        ]
-      },
-      {
-        "kind": "category",
-        "name": "Envelopes",
-        "contents": [
-          {
-            "kind": "block",
-            "type": "logic_operation"
-          },
-          {
-            "kind": "block",
-            "type": "logic_boolean"
-          }
-        ]
-      },
-      {
-        "kind": "category",
-        "name": "Filters",
-        "contents": [
-          {
-            "kind": "block",
-            "type": "string_length"
-          },
-        ]
-      },
-      {
-        "kind": "category",
-        "name": "Variables",
-        "contents": [
-          {
-            "kind": "block",
-            "type": "variables_get"
-          },
-        ]
-      }
-    ]
-  }
+import { csoundGenerator } from "./csound_generator.js";
+import { toolbox } from "./toolbox.js"
 
-function setUpBlockly() {
+//import * as Blockly from 'blockly'
+//import {toolbox} from 'toolbox.js';
+
+const runCode = (codeDiv) => { // arrow function
+  const code = csoundGenerator.workspaceToCode(window.workspace);
+  codeDiv.innerText = code;
+}
+
+function main() { 
     const blocklyArea = document.getElementById('blocklyArea');
     const blocklyDiv = document.getElementById('blocklyDiv');
-    window.workspace = Blockly.inject(blocklyDiv,
-        { toolbox: toolbox });
+    const codeDiv = document.getElementById('generatedCode');
+    window.workspace = Blockly.inject(blocklyDiv, { toolbox: toolbox }); // what do I get window from? 
     const onresize = function (e) {
         // Compute the absolute coordinates and dimensions of blocklyArea.
         let element = blocklyArea;
@@ -90,6 +33,17 @@ function setUpBlockly() {
     };
     window.addEventListener('resize', onresize, false);
     onresize();
+
+    window.workspace.addChangeListener((e) => {
+      // Don't run the code when the workspace finishes loading; we're
+      // already running it once when the application starts.
+      // Don't run the code during drags; we might have invalid state.
+      if (e.isUiEvent || e.type == Blockly.Events.FINISHED_LOADING ||
+        window.workspace.isDragging()) {
+        return;
+      }
+      runCode(codeDiv);
+    });
 }
 
-window.addEventListener('DOMContentLoaded', setUpBlockly);
+window.addEventListener('DOMContentLoaded', main);
