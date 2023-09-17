@@ -15,3 +15,8 @@ csoundGenerator.scrub_ = function(block, code, thisOnly) {
 csoundGenerator.forBlock['instrument'] = function(block) {
     return ['okay', Order.ATOMIC];
 }
+
+csoundGenerator.forBlock['math_number'] = function(block) {
+    const code = String(block.getFieldValue('NUM'));
+    return [code, Order.ATOMIC];
+  };
