@@ -2,10 +2,11 @@
 <html>
 
 <head>
-    <title>Csound: a review</title>
+    <title>BlockSound</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/blockly/blockly.min.js"></script>
     <script src="custom_blocks.js"></script>
+    <script src="serialization.js" type="module"></script>
     <script src="main.js" type="module"></script>
 
     <script src="csound_generator.js" type="module"></script>
@@ -13,13 +14,6 @@
 </head>
 
 <body>
-    <!-- csound linker - test using Ping example -->
-    <!-- <h1>Csound Test Cases</h1>
-    <div id="click for ping" onclick="play()"> 
-        <h1>Pink</h1>
-        <p>Click here to hear a sound</p>
-    </div> -->
-    <!-- <button onclick="play()">Click me</button> -->
     <h1>Test play</h1>
     <p>
         <input type="button" id="play" onclick="start()" value=">">
@@ -32,7 +26,7 @@
     </p>
 
     <div id="outputPane">
-        <pre id="generatedCode"><code>Hello</code></pre>
+        <pre id="generatedCode"><code>No code inputted yet</code></pre>
         <div id="output"></div>
     </div>
     

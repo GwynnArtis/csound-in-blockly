@@ -11,8 +11,16 @@ export const toolbox = {
           },
           {
             "kind": "block",
-            "type": "performance"
-          }
+            "type": "UDO",
+          },
+          {
+            "kind": "block",
+            "type": "schedule"
+          },
+          // { // might add for more clarity - not sure yet
+          //   "kind": "block",
+          //   "type": "schedule_in_block"
+          // }
         ]
       },
       {
@@ -37,10 +45,6 @@ export const toolbox = {
             "kind": "block",
             "type": "logic_operation"
           },
-          {
-            "kind": "block",
-            "type": "logic_boolean"
-          }
         ]
       },
       {
@@ -64,6 +68,14 @@ export const toolbox = {
           {
             "kind": "block",
             "type": "variable_set"
+          },
+          {
+            "kind": "block",
+            "type": "variable_change"
+          },
+          {
+            "kind": "block",
+            "type": "math_number"
           }
         ]
       }

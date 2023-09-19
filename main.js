@@ -1,5 +1,6 @@
 import { csoundGenerator } from "./csound_generator.js";
-import { toolbox } from "./toolbox.js"
+import { toolbox } from "./toolbox.js";
+import { save, load } from "./serialization.js";
 
 //import * as Blockly from 'blockly'
 //import {toolbox} from 'toolbox.js';
@@ -33,6 +34,14 @@ function main() {
     };
     window.addEventListener('resize', onresize, false);
     onresize();
+    load(window.workspace);
+
+    window.workspace.addChangeListener((e) => {
+      // UI events are things like scrolling, zooming, etc.
+      // No need to save after one of these.
+      if (e.isUiEvent) return;
+      save(window.workspace);
+    });
 
     window.workspace.addChangeListener((e) => {
       // Don't run the code when the workspace finishes loading; we're
