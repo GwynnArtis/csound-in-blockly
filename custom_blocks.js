@@ -4,14 +4,19 @@ Blockly.defineBlocksWithJsonArray([{
   "message0": 'instr %1',
   "args0": [
     {
-      "type": "field_variable",
-      "name": "VALUE",
-      "check": "String"
-    },
+      "type": "field_input",
+      "name": "NAME"
+    }
   ],
-  "nextStatement": "null",
+  "message1": "%1 endin",
+  "args1": [
+    {
+      "type": "input_statement",
+      "name": "ELEMENTS"
+    }
+  ],
   "colour": 160,
-  "tooltip": "Returns number of letters in the provided text.",
+  "tooltip": "Defines an instrument object.",
   "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
 }]);
 
@@ -39,19 +44,16 @@ Blockly.defineBlocksWithJsonArray([{
   "args0": [
     {
       "type": "input_value",
-      "name": "FREQ",
-      "check": "String"
+      "name": "AMP"
     },
     {
       "type": "input_value",
-      "name": "AMP",
-      "check": "String"
+      "name": "FREQ"
     }
   ],
-  "previousStatement": "null",
-  "nextStatement": "null",
+  "output": null,
   "colour": 200,
-  "tooltip": "oscili freq, amp, ifn",
+  "tooltip": "oscili xamp, xcps[, ifn, iphs]",
   "helpUrl": "http://www.w3schools.com/jsref/jsref_length_string.asp"
 }]);
 

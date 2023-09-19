@@ -13,8 +13,22 @@ csoundGenerator.scrub_ = function(block, code, thisOnly) {
 };
 
 csoundGenerator.forBlock['instrument'] = function(block) {
-    return ['okay', Order.ATOMIC];
+    const name = block.getFieldValue('NAME');
+    //const elements = generator.statementToCode(block, 'ELEMENTS');
+    //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
+    const code = 
+`instr ${name}
+    asig = 
+    out asig, asig
+endin`; 
+    return code;
 }
+
+// csoundGenerator.forBlock['oscili'] = function(block) {
+//     const 
+// }
+
+// csoundGenerator.forBlock['variable_string']
 
 csoundGenerator.forBlock['math_number'] = function(block) {
     const code = String(block.getFieldValue('NUM'));

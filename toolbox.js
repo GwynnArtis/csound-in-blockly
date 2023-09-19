@@ -49,22 +49,21 @@ export const toolbox = {
         "contents": [
           {
             "kind": "block",
-            "type": "string_length"
+            "type": "math_number"
           },
         ]
       },
       {
         "kind": "category",
         "name": "Variables",
-        "custom": "VARIABLE", // allows user to make custom variable, but deletes all other block choices. Not sure where to put this
         "contents": [
           {
             "kind": "block",
-            "type": "variables_get"
+            "type": "variable_get"
           },
           {
             "kind": "block",
-            "type": "math_number"
+            "type": "variable_set"
           }
         ]
       }
