@@ -12,18 +12,35 @@ csoundGenerator.scrub_ = function(block, code, thisOnly) {
     return code;
 };
 
+// General block generators
 csoundGenerator.forBlock['instrument'] = function(block, generator) {
     const name = block.getFieldValue('NAME');
     const elements = generator.statementToCode(block, 'ELEMENTS');
     //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
     const code = 
 `instr ${name}
-    ${elements}
-    out asig, asig
+${elements}
 endin`; 
     return code;
 }
+csoundGenerator.forBlock['out'] = function(block) {
+    const arg1 = block.getField('ARG1').variable.name;
+    const arg2 = block.getField('ARG2').variable.name;
+    const code = `out ${arg1}, ${arg2}`;
+    return code;
+}
+csoundGenerator.forBlock['UDO'] = function(block, generator) {
+    const name = block.getFieldValue('NAME');
+    const elements = generator.statementToCode(block, 'ELEMENTS');
+    // if xin != null then extract input arg rates and add them next to the opcode name 
+    const code = 
+`opcode ${name}
+${elements}
+endop`;
+    return code;
+}
 
+// Variable block generators
 csoundGenerator.forBlock['variable_get'] = function(block) {
     const name = block.getFieldValue('NAME');
     const code = `${name}`;
@@ -48,4 +65,5 @@ csoundGenerator.forBlock['oscili'] = function(block, generator) {
 csoundGenerator.forBlock['math_number'] = function(block) {
     const code = String(block.getFieldValue('NUM'));
     return [code, Order.ATOMIC];
-  };
+};
+
