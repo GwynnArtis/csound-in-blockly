@@ -119,6 +119,13 @@ Blockly.defineBlocksWithJsonArray([{
       "name": "DUR"
     }
   ],
+  "message1": "p-fields %1",
+  "args1": [
+    {
+      "type": "input_statement",
+      "name": "INPUTS"
+    }
+  ],
   // "previousStatement": null, // might add 'schedule_in_block' separately and put these lines in there instead 
   // "nextStatement": null,
   "colour": 160,
@@ -130,11 +137,12 @@ Blockly.defineBlocksWithJsonArray([{
   "message0": 'p%1', // need to be able to dynamically add connections
   "args0": [
     {
-      "type": "field_number",
+      "type": "field_input",
       "name": "ARG1"
     }
   ],
-  "output": null,
+  "nextStatement": null,
+  "previousStatement": null,
   "colour": 160,
   "tooltip": "instrument block", // change later
   "helpUrl": "https://csound.com/docs/manual/instr.html"

@@ -1,6 +1,7 @@
 import { csoundGenerator } from "./csound_generator.js";
 import { toolbox } from "./toolbox.js";
 import { save, load } from "./serialization.js";
+import { generateCsd, loadCsdFromString, pause, rewind, start } from "./csound_linker.js";
 
 //import * as Blockly from 'blockly'
 //import {toolbox} from 'toolbox.js';
@@ -8,6 +9,13 @@ import { save, load } from "./serialization.js";
 const runCode = (codeDiv) => { // arrow function
   const code = csoundGenerator.workspaceToCode(window.workspace);
   codeDiv.innerText = code;
+}
+
+const blocklyToCsound = () => {
+  const instr = csoundGenerator.workspaceToCode(window.workspace);
+  const csd = generateCsd(instr, "i 1 0 2");
+  loadCsdFromString(csd);
+  console.log(csd);
 }
 
 function main() { 
@@ -53,6 +61,11 @@ function main() {
       }
       runCode(codeDiv);
     });
+
+    document.getElementById("load").addEventListener("click", blocklyToCsound);
+    document.getElementById("play").addEventListener("click", start);
+    document.getElementById("pause").addEventListener("click", pause);
+    document.getElementById("rewind").addEventListener("click", rewind);
 }
 
 window.addEventListener('DOMContentLoaded', main);

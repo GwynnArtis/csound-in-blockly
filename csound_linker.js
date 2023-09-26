@@ -1,18 +1,26 @@
 const csoundjs = "./csound.js";
 let csound = null;
 
+let isLoaded = false;
 let isOn = false;
-const csd = './csoundTestFile.csd'
+let isStarted = false;
+//const csd = './csoundTestFile.csd'
 
-async function start() {
-    if (csound == null) {
-        const { Csound } = await import(csoundjs);
-        csound = await Csound();
-        await copyUrlToLocal(csd, csd) // are there not supposed to be semicolons here?
-        await csound.compileCsd(csd)
-        await csound.on("message", handleMessage); // handles csound messages - will handle later
+export async function loadCsdFromString(string) {
+    await loadCsound();
+    await copyStringToLocal(string, "local.csd");
+    isLoaded = true;
+}
+
+export async function start() {
+    await loadCsound();
+    if (isLoaded && !isStarted) {
+        await csound.compileCsd("local.csd");
+        // await copyUrlToLocal(csd, csd); // are there not supposed to be semicolons here?
+        // await csound.compileCsd(csd);
         await csound.start();
         isOn = true;
+        isStarted = true;
     }
     if (!isOn) {
         await csound.resume();
@@ -21,6 +29,14 @@ async function start() {
 }
 
 let count = 0;
+async function loadCsound() {
+    if (csound == null) {
+        const { Csound } = await import(csoundjs);
+        csound = await Csound();
+        await csound.on("message", handleMessage);
+    }
+}
+
 function handleMessage(message) {
     let element = document.getElementById('console');
     element.value += message + '\n';
@@ -32,16 +48,22 @@ function handleMessage(message) {
     count += 1;
 };
 
-async function copyUrlToLocal(src, dest) {
-    // fetch the file
-    let srcfile = await fetch(src)
-    // get the file data as an array
-    let dat = await srcfile.arrayBuffer();
+// async function copyUrlToLocal(src, dest) {
+//     // fetch the file
+//     let srcfile = await fetch(src)
+//     // get the file data as an array
+//     let dat = await srcfile.arrayBuffer();
+//     // write the data as a new file in the filesystem
+//     await csound.fs.writeFile(dest, new Uint8Array(dat));
+// }
+
+async function copyStringToLocal(string, dest) {
+    let dat = new TextEncoder().encode(string);
     // write the data as a new file in the filesystem
     await csound.fs.writeFile(dest, new Uint8Array(dat));
 }
 
-async function pause() {
+export async function pause() {
     if (csound != null) {
         if (isOn) {
             await csound.pause();
@@ -53,20 +75,32 @@ async function pause() {
     }
 }
 
-// const code = `
-// instr 1
-//     out linenr(oscili(p4, p5), 0.01, 0.5, 0.01)
-// endin
-// schedule(1, 0, 1, 0.5, 440)
-// `;
+export async function rewind() {
+    if (csound != null) {
+        await csound.rewindScore(); // for CsScore statements 
+        isStarted = false;
+    }
+}
 
-// async function play() {
-//     if(csound == null) {
-//         const {Csound} = await import(csoundjs);
-//         csound = await Csound();
-//         await csound.setOption("-odac");
-//         await csound.compileOrc(code);
-//         await csound.start();
-//     }
-//     else await csound.inputMessage(`i1 0 1 0.2 440`);
-// }
+export function generateCsd(instr, score = "") {
+    return `
+    <CsoundSynthesizer>
+    <CsOptions>
+    -odac -d
+    </CsOptions>
+    <CsInstruments>
+    
+    sr = 44100
+    ksmps = 32
+    nchnls = 2
+    0dbfs = 1
+    
+    ${instr}
+    
+    </CsInstruments>
+    <CsScore>
+    ${score}
+    </CsScore>
+    </CsoundSynthesizer>
+    `
+}
