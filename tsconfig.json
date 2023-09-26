@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
-        "outDir": "dist",
+        "outDir": "docs",
         "declaration": false,
         "declarationMap": false,
         "module": "ES2015",
