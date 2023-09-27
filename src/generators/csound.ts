@@ -60,6 +60,40 @@ csoundGenerator.forBlock["xout"] = function (block, generator) {
   return code;
 };
 
+// Performance block generators
+csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
+  const instr = block.getFieldValue("INSTR");
+  const start = block.getFieldValue("START");
+  const dur = block.getFieldValue("DUR");
+  const pFields = generator.statementToCode(block, "PFIELDS");
+  if (pFields == null) {
+    const code = `schedule ${instr}, ${start}, ${dur}`
+    return code
+  }
+  else {
+    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`
+    return code;
+  }
+};
+csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
+  const instr = block.getFieldValue("INSTR");
+  const start = block.getFieldValue("START");
+  const dur = block.getFieldValue("DUR");
+  const pFields = generator.statementToCode(block, "PFIELDS");
+  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`
+  return code;
+};
+csoundGenerator.forBlock["pfield"] = function (block) {
+  const arg = block.getField("ARG1").getText();
+  const code = `p${arg}`;
+  return code;
+};
+csoundGenerator.forBlock["pfield_set"] = function (block, generator) {
+  const value = generator.valueToCode(block, 'VALUE', Order.ATOMIC);
+  const code = `${value}`;
+  return code;
+};
+
 // Variable block generators
 csoundGenerator.forBlock["variable_get"] = function (block) {
   const name = block.getFieldValue("NAME");

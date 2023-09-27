@@ -6,10 +6,6 @@
 
 import * as Blockly from "blockly/core";
 
-// Create a custom block called 'add_text' that adds
-// text to the output div on the sample app.
-// This is just an example and you should replace this with your
-// own custom blocks.
 const addText: any = {
   type: "add_text",
   message0: "Add text %1 with color %2",
@@ -131,8 +127,8 @@ const xout: any = {
 };
 
 // Performance block definitions
-const playBlock: any = {
-  type: "schedule",
+const scheduleInInstr: any = {
+  type: "schedule_in_instr",
   message0: "play instr: %1, start: %2, dur: %3", // need to add dynamic resizing
   inputsInline: true,
   args0: [
@@ -153,24 +149,77 @@ const playBlock: any = {
   args1: [
     {
       type: "input_statement",
-      name: "INPUTS",
+      name: "PFIELDS",
     },
   ],
-  // "previousStatement": null, // might add 'schedule_in_block' separately and put these lines in there instead
-  // "nextStatement": null,
+  "previousStatement": null, // might add 'schedule_in_block' separately and put these lines in there instead
+  "nextStatement": null,
+  colour: 160,
+  tooltip:
+    "Plays an instance of a specified instrument at given start and duration times. Use p-fields as additional arguments",
+  helpUrl: "http://www.csounds.com/manual/html/schedule.html",
+};
+const scheduleGlobally: any = {
+  type: "schedule_global",
+  message0: "play instr: %1, start: %2, dur: %3", // need to add dynamic resizing
+  inputsInline: true,
+  args0: [
+    {
+      type: "input_value",
+      name: "INSTR",
+    },
+    {
+      type: "input_value",
+      name: "START",
+    },
+    {
+      type: "input_value",
+      name: "DUR",
+    },
+  ],
+  message1: "p-fields %1",
+  args1: [
+    {
+      type: "input_statement",
+      name: "PFIELDS",
+    },
+  ],
   colour: 160,
   tooltip:
     "Plays an instance of a specified instrument at given start and duration times. Use p-fields as additional arguments",
   helpUrl: "http://www.csounds.com/manual/html/schedule.html",
 };
 const pField: any = {
-  type: "p-fields",
+  type: "pfield",
   message0: "p%1",
   args0: [
     {
-      type: "field_input",
-      name: "ARG1",
+      type: "field_number",
+      name: "NUMBER",
+      value: "1",
+      precision: 1
+    }
+  ],
+  nextStatement: null,
+  previousStatement: null,
+  colour: 160,
+  tooltip: "instrument block", // change later
+  helpUrl: "https://csound.com/docs/manual/instr.html",
+};
+const pFieldSet: any = {
+  type: "pfield_set",
+  message0: "p%1 = %2",
+  args0: [
+    {
+      type: "field_number",
+      name: "NUMBER",
+      value: "1",
+      precision: 1
     },
+    {
+      type: "input_value",
+      name: "VALUE",
+    }
   ],
   nextStatement: null,
   previousStatement: null,
@@ -461,8 +510,10 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   xin,
   xout,
   // Performance
-  playBlock,
+  scheduleInInstr,
+  scheduleGlobally,
   pField,
+  pFieldSet,
   // Variables
   variable_get,
   variable_set,

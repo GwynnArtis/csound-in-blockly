@@ -37,16 +37,20 @@ export const toolbox = {
         },
         {
           kind: "block",
-          type: "schedule", // need to modify to accept at least 3 inputs and change output
+          type: "schedule_in_instr",
         },
-        // { // might add for more clarity - not sure yet
-        //   "kind": "block",
-        //   "type": "schedule_in_block"
-        // }
+        { 
+          "kind": "block",
+          "type": "schedule_global"
+        },
         {
           kind: "block",
-          type: "p-fields",
+          type: "pfield",
         },
+        {
+          kind: "block",
+          type: "pfield_set",
+        }
       ],
     },
     {
