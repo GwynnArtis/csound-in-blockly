@@ -1,6 +1,8 @@
 import * as Blockly from "blockly/core";
+import { pFieldSet } from "../blocks/text";
 
 class CsoundGenerator extends Blockly.CodeGenerator {
+  inlineBlocks = [pFieldSet.type];
   constructor() {
     super("CsoundGenerator");
   }
@@ -9,11 +11,14 @@ class CsoundGenerator extends Blockly.CodeGenerator {
     code: string,
     thisOnly?: boolean | undefined
   ): string {
-    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    const nextBlock =
+      block.nextConnection && block.nextConnection.targetBlock();
+    console.log(block.type, code, thisOnly, nextBlock);
     if (nextBlock && !thisOnly) {
-        return code + '\n' + csoundGenerator.blockToCode(nextBlock);
+      const sep = this.inlineBlocks.includes(block.type) ? ", " : "\n";
+      return code + sep + csoundGenerator.blockToCode(nextBlock);
     }
-    return code;;
+    return code;
   }
 }
 export const csoundGenerator = new CsoundGenerator();
@@ -62,34 +67,29 @@ csoundGenerator.forBlock["xout"] = function (block, generator) {
 
 // Performance block generators
 csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
-  const instr = block.getFieldValue("INSTR");
-  const start = block.getFieldValue("START");
-  const dur = block.getFieldValue("DUR");
+  const instr = generator.valueToCode(block, "INSTR", Order.ATOMIC);
+  const start = generator.valueToCode(block, "START", Order.ATOMIC);
+  const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
-  if (pFields == null) {
-    const code = `schedule ${instr}, ${start}, ${dur}`
-    return code
-  }
-  else {
-    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`
-    return code;
-  }
+  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`;
+  return code;
 };
 csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
-  const instr = block.getFieldValue("INSTR");
-  const start = block.getFieldValue("START");
-  const dur = block.getFieldValue("DUR");
+  const instr = generator.valueToCode(block, "INSTR", Order.ATOMIC);
+  const start = generator.valueToCode(block, "START", Order.ATOMIC);
+  const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
-  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`
+  // TODO: figure out where spaces are coming from
+  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`; 
   return code;
 };
 csoundGenerator.forBlock["pfield"] = function (block) {
-  const arg = block.getField("ARG1").getText();
+  const arg = block.getField("NUMBER").getText();
   const code = `p${arg}`;
-  return code;
+  return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["pfield_set"] = function (block, generator) {
-  const value = generator.valueToCode(block, 'VALUE', Order.ATOMIC);
+  const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
   const code = `${value}`;
   return code;
 };

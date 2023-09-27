@@ -200,20 +200,19 @@ const pField: any = {
       precision: 1
     }
   ],
-  nextStatement: null,
-  previousStatement: null,
+  output: null,
   colour: 160,
   tooltip: "instrument block", // change later
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
-const pFieldSet: any = {
+export const pFieldSet: any = {
   type: "pfield_set",
   message0: "p%1 = %2",
   args0: [
     {
       type: "field_number",
       name: "NUMBER",
-      value: "1",
+      value: "4",
       precision: 1
     },
     {
