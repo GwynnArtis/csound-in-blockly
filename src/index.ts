@@ -10,7 +10,13 @@ import { save, load } from "./serialization";
 import { toolbox } from "./toolbox";
 import "./index.css";
 import { csoundGenerator } from "./generators/csound";
-import { generateCsd, loadCsdFromString, pause, rewind, start } from "./csound_linker";
+import {
+  generateCsd,
+  loadCsdFromString,
+  pause,
+  rewind,
+  start,
+} from "./csound_linker";
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
@@ -34,6 +40,14 @@ const blocklyToCsound = () => {
   const csd = generateCsd(instr, "i 1 0 2"); // hardcoded for now
   loadCsdFromString(csd);
 };
+
+document.getElementById("load").addEventListener("click", blocklyToCsound);
+document.getElementById("play").addEventListener("click", start);
+document.getElementById("pause").addEventListener("click", pause);
+document.getElementById("rewind").addEventListener("click", rewind);
+document
+  .getElementById("clearWS")
+  .addEventListener("click", () => window.localStorage.clear());
 
 if (ws) {
   // Load the initial state from storage and run the code.
@@ -63,8 +77,3 @@ if (ws) {
     runCode();
   });
 }
-
-document.getElementById("load").addEventListener("click", blocklyToCsound);
-document.getElementById("play").addEventListener("click", start);
-document.getElementById("pause").addEventListener("click", pause);
-document.getElementById("rewind").addEventListener("click", rewind);
