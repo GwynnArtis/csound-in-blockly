@@ -37,7 +37,7 @@ const runCode = () => {
 
 const blocklyToCsound = () => {
   const instr = csoundGenerator.workspaceToCode(ws);
-  const csd = generateCsd(instr, "i 1 0 2"); // hardcoded for now
+  const csd = generateCsd(instr, " "); // hardcoded for now
   loadCsdFromString(csd);
 };
 

@@ -71,7 +71,8 @@ csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
   const start = generator.valueToCode(block, "START", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
-  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields}`;
+  // TODO: figure out where spaces are coming from
+  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
   return code;
 };
 csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
@@ -79,9 +80,15 @@ csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
   const start = generator.valueToCode(block, "START", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
+  console.log(pFields);
   // TODO: figure out where spaces are coming from
-  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`; 
-  return code;
+  if (!pFields) {
+    const code = `schedule ${instr}, ${start}, ${dur}`;
+    return code;
+  } else {
+    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
+    return code;
+  }
 };
 csoundGenerator.forBlock["pfield"] = function (block) {
   const arg = block.getField("NUMBER").getText();
