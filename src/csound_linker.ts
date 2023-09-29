@@ -7,17 +7,16 @@ let isStarted = false;
 //const csd = './csoundTestFile.csd'
 
 export async function loadCsdFromString(string: string) {
-    await loadCsound();
+    await loadCsound(true);
     await copyStringToLocal(string, "local.csd");
     isLoaded = true;
 }
 
+// TODO: redo start() function to be clearer
 export async function start() {
     await loadCsound();
     if (isLoaded && !isStarted) {
         await csound.compileCsd("local.csd");
-        // await copyUrlToLocal(csd, csd); // are there not supposed to be semicolons here?
-        // await csound.compileCsd(csd);
         await csound.start();
         isOn = true;
         isStarted = true;
@@ -29,10 +28,14 @@ export async function start() {
 }
 
 let count = 0;
-async function loadCsound() {
-    if (csound == null) {
+async function loadCsound(forceReload = false) {
+    if (csound == null || forceReload) {
+        isOn = false;
+        isLoaded = false;
+        isStarted = false;
         csound = await Csound();
         await csound.on("message", handleMessage);
+        handleMessage("\n================\nCsound loaded\n================");
     }
 }
 
