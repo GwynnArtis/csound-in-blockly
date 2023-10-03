@@ -65,30 +65,44 @@ export const toolbox = {
           kind: "block",
           type: "variable_set",
         },
-        {
-          kind: "block",
-          type: "variable_change",
-        },
+        // {
+        //   kind: "block",
+        //   type: "variable_change",
+        // },
         {
           kind: "block",
           type: "math_number",
         },
+        {
+          kind: "block",
+          type: "text"
+        }
       ],
     },
-    // {
-    //   "kind": "category",
-    //   "name": "Arrays and f-tables",
-    //   "contents": [
-    //     {
-    //       "kind": "block",
-    //       "type": "array"
-    //     },
-    //     {
-    //       "kind": "block",
-    //       "type": "ftable"
-    //     }
-    //   ]
-    // },
+    {
+      "kind": "category",
+      "name": "Arrays and f-tables",
+      "contents": [
+        {
+          "kind": "block",
+          "type": "lists_create_with"
+        },
+        // {
+        //   "kind": "block",
+        //   "type": "ftable"
+        // }
+      ]
+    },
+    {
+      kind: "category",
+      name: "Math",
+      contents: [
+        {
+          kind: "block",
+          type: "addition",
+        },
+      ],
+    },
     {
       kind: "category",
       name: "Control flow",

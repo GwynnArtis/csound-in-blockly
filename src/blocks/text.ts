@@ -152,8 +152,8 @@ const scheduleInInstr: any = {
       name: "PFIELDS",
     },
   ],
-  "previousStatement": null, // might add 'schedule_in_block' separately and put these lines in there instead
-  "nextStatement": null,
+  previousStatement: null, // might add 'schedule_in_block' separately and put these lines in there instead
+  nextStatement: null,
   colour: 160,
   tooltip:
     "Plays an instance of a specified instrument at given start and duration times. Use p-fields as additional arguments",
@@ -196,9 +196,9 @@ const pField: any = {
     {
       type: "field_number",
       name: "NUMBER",
-      value: "1",
-      precision: 1
-    }
+      value: "4",
+      precision: 1,
+    },
   ],
   output: null,
   colour: 160,
@@ -213,12 +213,12 @@ export const pFieldSet: any = {
       type: "field_number",
       name: "NUMBER",
       value: "4",
-      precision: 1
+      precision: 1,
     },
     {
       type: "input_value",
       name: "VALUE",
-    }
+    },
   ],
   nextStatement: null,
   previousStatement: null,
@@ -261,29 +261,60 @@ const variable_set: any = {
   nextStatement: null,
   colour: 200,
 };
-const variable_change: any = {
-  type: "variable_change",
-  message0: "change %1 by %2",
+// const variable_change: any = { // might remove
+//   type: "variable_change",
+//   message0: "change %1 by %2",
+//   args0: [
+//     {
+//       type: "field_variable",
+//       name: "NAME",
+//       variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
+//     },
+//     {
+//       type: "input_value", // This expects an input of any type
+//       name: "VALUE",
+//     },
+//   ],
+//   previousStatement: null,
+//   nextStatement: null,
+//   colour: 200,
+// };
+
+// Math block definitions
+const addition: any = {
+  type: "addition",
+  message0: "%1 %2 %3",
   args0: [
     {
-      type: "field_variable",
-      name: "NAME",
-      variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
+      type: "input_value",
+      name: "A",
     },
     {
-      type: "input_value", // This expects an input of any type
-      name: "VALUE",
+      type: "field_dropdown",
+      name: "OP",
+      options: [
+        ["%{BKY_MATH_ADDITION_SYMBOL}", "ADD"],
+        ["%{BKY_MATH_SUBTRACTION_SYMBOL}", "MINUS"],
+        ["%{BKY_MATH_MULTIPLICATION_SYMBOL}", "MULTIPLY"],
+        ["%{BKY_MATH_DIVISION_SYMBOL}", "DIVIDE"],
+        ["%{BKY_MATH_POWER_SYMBOL}", "POWER"]
+      ],
+    },
+    {
+      type: "input_value",
+      name: "B",
     },
   ],
-  previousStatement: null,
-  nextStatement: null,
+  inputsInline: true,
+  output: null,
   colour: 200,
+  extensions: ["math_op_tooltip"]
 };
 
 // Oscillator block definitions
 const oscili: any = {
   type: "oscili",
-  message0: "oscili %1, %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "oscili %1 %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -295,14 +326,25 @@ const oscili: any = {
       name: "FREQ",
     },
   ],
+  message1: "ifn? %1 iphs? %2",
+  args1: [
+    {
+      type: "input_value",
+      name: "IFN",
+    },
+    {
+      type: "input_value",
+      name: "IPHS",
+    },
+  ],
   output: null,
   colour: 290,
-  tooltip: "oscili xamp, xcps[, ifn, iphs]",
+  tooltip: "oscili xamp, xcps[, ifn = -1, iphs = 0]",
   helpUrl: "http://www.csounds.com/manual/html/oscili.html",
 };
 const vco2: any = {
   type: "vco2",
-  message0: "vco2 %1, %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "vco2 %1 %2 imode? %3", // add more optional arguments
   inputsInline: true,
   args0: [
     {
@@ -313,6 +355,22 @@ const vco2: any = {
       type: "input_value",
       name: "FREQ",
     },
+    {
+      type: "input_value",
+      name: "IMODE",
+    },
+    // {
+    //   type: "input_value",
+    //   name: "KPW",
+    // },
+    // {
+    //   type: "input_value",
+    //   name: "KPHS",
+    // },
+    // {
+    //   type: "input_value",
+    //   name: "INYX",
+    // },
   ],
   output: null,
   colour: 290,
@@ -417,7 +475,7 @@ const lowpass: any = {
 };
 const highpass: any = {
   type: "highpass",
-  message0: "highpass %1, %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "highpass %1 %2 skip? %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -427,6 +485,10 @@ const highpass: any = {
     {
       type: "input_value",
       name: "CUTOFF",
+    },
+    {
+      type: "input_value",
+      name: "ISKIP",
     },
   ],
   output: null,
@@ -461,7 +523,7 @@ const bandpass: any = {
 // Delay block definitions
 const delay: any = {
   type: "delay",
-  message0: "lowpass %1, %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "delay %1, %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -516,9 +578,11 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // Variables
   variable_get,
   variable_set,
-  variable_change,
+  // variable_change, // remove?
   // Arrays
 
+  // Math
+  addition,
   // Control flow
 
   // Oscillators
