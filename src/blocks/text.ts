@@ -560,6 +560,72 @@ const reverb: any = {
   helpUrl: "http://www.csounds.com/manual/html/reverb.html",
 };
 
+// Global constants block definitions
+const samplerate: any = {
+  type: "samplerate",
+  message0: "sr = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  inputsInline: true,
+  args0: [
+    {
+      type: "input_value",
+      name: "SR",
+      check: "number"
+    }
+  ],
+  output: null,
+  colour: 360,
+  tooltip: "Sets global sample rate",
+  helpUrl: "http://www.csounds.com/manual/html/sr.html",
+};
+const ksmps: any = {
+  type: "ksmps",
+  message0: "ksmps = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  inputsInline: true,
+  args0: [
+    {
+      type: "input_value",
+      name: "KSMPS",
+      check: "number"
+    }
+  ],
+  output: null,
+  colour: 360,
+  tooltip: "Sets global number of samples in a control period (k-rate)",
+  helpUrl: "http://www.csounds.com/manual/html/ksmps.html",
+};
+const nchnls: any = {
+  type: "nchnls",
+  message0: "nchnls = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  inputsInline: true,
+  args0: [
+    {
+      type: "input_value",
+      name: "NHCNLS",
+      check: "number"
+    }
+  ],
+  output: null,
+  colour: 360,
+  tooltip: "Sets global number of channels",
+  helpUrl: "http://www.csounds.com/manual/html/nchnls.html",
+};
+const dbfs: any = {
+  type: "0dbfs",
+  message0: "0dbfs = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  inputsInline: true,
+  args0: [
+    {
+      type: "input_value",
+      name: "DBFS",
+      check: "number"
+    }
+  ],
+  output: null,
+  colour: 360,
+  tooltip: "Sets the value of 0 decibels using full-scale amplitude",
+  helpUrl: "http://www.csounds.com/manual/html/Zerodbfs.html",
+};
+
 // Create the block definitions for the JSON-only blocks.
 // This does not register their definitions with Blockly.
 // This file has no side effects!
@@ -599,5 +665,9 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // Delays
   delay,
   reverb,
-  // Other
+  // Constants
+  samplerate,
+  ksmps,
+  nchnls,
+  dbfs
 ]);

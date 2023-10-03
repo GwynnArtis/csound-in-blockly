@@ -247,7 +247,7 @@ csoundGenerator.forBlock["reverb"] = function (block, generator) {
     return [code, Order.ATOMIC];
 };
 
-// Other block generators
+// Constants block generators
 
 
 

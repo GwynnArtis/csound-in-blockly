@@ -33,10 +33,6 @@ export const toolbox = {
       contents: [
         {
           kind: "block",
-          type: "lists_create_with",
-        },
-        {
-          kind: "block",
           type: "schedule_in_instr",
         },
         { 
@@ -183,19 +179,23 @@ export const toolbox = {
     },
     {
       kind: "category",
-      name: "Other",
+      name: "Constants",
       contents: [
         {
           kind: "block",
-          type: "pan2",
+          type: "samplerate",
         },
         {
           kind: "block",
-          type: "cpspch",
+          type: "ksmps",
         },
         {
           kind: "block",
-          type: "ampdb",
+          type: "nchnls",
+        },
+        {
+          kind: "block",
+          type: "0dbfs"
         },
       ],
     },
