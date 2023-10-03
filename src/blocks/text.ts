@@ -249,8 +249,6 @@ const variable_set: any = {
       type: "field_variable",
       name: "NAME",
       variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
-      variableTypes: ["String"],
-      defaultType: "String",
     },
     {
       type: "input_value",
@@ -261,24 +259,6 @@ const variable_set: any = {
   nextStatement: null,
   colour: 200,
 };
-// const variable_change: any = { // might remove
-//   type: "variable_change",
-//   message0: "change %1 by %2",
-//   args0: [
-//     {
-//       type: "field_variable",
-//       name: "NAME",
-//       variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
-//     },
-//     {
-//       type: "input_value", // This expects an input of any type
-//       name: "VALUE",
-//     },
-//   ],
-//   previousStatement: null,
-//   nextStatement: null,
-//   colour: 200,
-// };
 
 // Math block definitions
 const addition: any = {
@@ -297,7 +277,7 @@ const addition: any = {
         ["%{BKY_MATH_SUBTRACTION_SYMBOL}", "MINUS"],
         ["%{BKY_MATH_MULTIPLICATION_SYMBOL}", "MULTIPLY"],
         ["%{BKY_MATH_DIVISION_SYMBOL}", "DIVIDE"],
-        ["%{BKY_MATH_POWER_SYMBOL}", "POWER"]
+        ["%{BKY_MATH_POWER_SYMBOL}", "POWER"],
       ],
     },
     {
@@ -308,7 +288,7 @@ const addition: any = {
   inputsInline: true,
   output: null,
   colour: 200,
-  extensions: ["math_op_tooltip"]
+  extensions: ["math_op_tooltip"],
 };
 
 // Oscillator block definitions
@@ -569,8 +549,8 @@ const samplerate: any = {
     {
       type: "input_value",
       name: "SR",
-      check: "number"
-    }
+      check: "number",
+    },
   ],
   output: null,
   colour: 360,
@@ -585,8 +565,8 @@ const ksmps: any = {
     {
       type: "input_value",
       name: "KSMPS",
-      check: "number"
-    }
+      check: "number",
+    },
   ],
   output: null,
   colour: 360,
@@ -601,8 +581,8 @@ const nchnls: any = {
     {
       type: "input_value",
       name: "NHCNLS",
-      check: "number"
-    }
+      check: "number",
+    },
   ],
   output: null,
   colour: 360,
@@ -617,8 +597,8 @@ const dbfs: any = {
     {
       type: "input_value",
       name: "DBFS",
-      check: "number"
-    }
+      check: "number",
+    },
   ],
   output: null,
   colour: 360,
@@ -669,5 +649,5 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   samplerate,
   ksmps,
   nchnls,
-  dbfs
+  dbfs,
 ]);

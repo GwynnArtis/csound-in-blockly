@@ -8,6 +8,7 @@ import * as Blockly from "blockly";
 import { blocks } from "./blocks/text";
 import { save, load } from "./serialization";
 import { toolbox } from "./toolbox";
+import { TypedVariableModal } from "@blockly/plugin-typed-variable-modal";
 import "./index.css";
 import { csoundGenerator } from "./generators/csound";
 import {
@@ -23,7 +24,6 @@ Blockly.common.defineBlocks(blocks);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById("generatedCode")?.firstChild;
-const outputDiv = document.getElementById("output");
 const blocklyDiv = document.getElementById("blocklyDiv");
 const ws = blocklyDiv && Blockly.inject(blocklyDiv, { toolbox });
 
@@ -48,6 +48,21 @@ document.getElementById("rewind").addEventListener("click", rewind);
 document
   .getElementById("clearWS")
   .addEventListener("click", () => window.localStorage.clear());
+
+// custom typed variable function
+const createFlyout = function (workspace: Blockly.Workspace) {
+  let xmlList: Element[] = [];
+  // Add your button and give it a callback name.
+  const button = document.createElement("button");
+  button.setAttribute("text", "Create Typed Variable");
+  button.setAttribute("callbackKey", "callbackName");
+  xmlList.push(button);
+  // This gets all the variables that the user creates and adds them to the
+  // flyout.
+  const blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+  xmlList = xmlList.concat(blockList);
+  return xmlList;
+};
 
 if (ws) {
   // Load the initial state from storage and run the code.
@@ -76,4 +91,11 @@ if (ws) {
     }
     runCode();
   });
+  ws.registerToolboxCategoryCallback("CREATE_TYPED_VARIABLE", createFlyout);
+  const typedVarModal = new TypedVariableModal(ws, "callbackName", [
+    ["a-rate", "audio-rate"],
+    ["k-rate", "control-rate"],
+    ["i-rate", "init-rate"]
+  ]);
+  typedVarModal.init();
 }

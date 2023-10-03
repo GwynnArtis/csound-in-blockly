@@ -61,10 +61,6 @@ export const toolbox = {
           kind: "block",
           type: "variable_set",
         },
-        // {
-        //   kind: "block",
-        //   type: "variable_change",
-        // },
         {
           kind: "block",
           type: "math_number",
@@ -72,6 +68,21 @@ export const toolbox = {
         {
           kind: "block",
           type: "text"
+        }
+      ],
+    },
+    {
+      kind: "category",
+      name: "Variables2",
+      custom: "CREATE_TYPED_VARIABLE",
+      contents: [
+        {
+          kind: "block",
+          type: "variables_get",
+        },
+        {
+          kind: "block",
+          type: "variables_set",
         }
       ],
     },
