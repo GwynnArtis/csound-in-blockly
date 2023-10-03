@@ -78,11 +78,11 @@ export const toolbox = {
       contents: [
         {
           kind: "block",
-          type: "variables_get",
+          type: "variables_get_dynamic",
         },
         {
           kind: "block",
-          type: "variables_set",
+          type: "variables_set_dynamic",
         }
       ],
     },

@@ -294,9 +294,17 @@ const addition: any = {
 // Oscillator block definitions
 const oscili: any = {
   type: "oscili",
-  message0: "oscili %1 %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "oscili:%1 %2 %3", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
+    {
+      type: "field_dropdown",
+      name: "RATE",
+      options: [
+        ["a", "audio-rate"],
+        ["k", "control-rate"]
+      ]
+    },
     {
       type: "input_value",
       name: "AMP",

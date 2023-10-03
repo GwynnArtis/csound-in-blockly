@@ -19,6 +19,11 @@ import {
   start,
 } from "./csound_linker";
 
+export const A_RATE = "audio-rate";
+export const K_RATE = "control-rate";
+export const I_RATE = "init-rate";
+export type UPDATE_RATE = typeof A_RATE | typeof K_RATE | typeof I_RATE;
+
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
 
@@ -93,9 +98,9 @@ if (ws) {
   });
   ws.registerToolboxCategoryCallback("CREATE_TYPED_VARIABLE", createFlyout);
   const typedVarModal = new TypedVariableModal(ws, "callbackName", [
-    ["a-rate", "audio-rate"],
-    ["k-rate", "control-rate"],
-    ["i-rate", "init-rate"]
+    ["a-rate", A_RATE],
+    ["k-rate", K_RATE],
+    ["i-rate", I_RATE]
   ]);
   typedVarModal.init();
 }
