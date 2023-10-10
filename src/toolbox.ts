@@ -94,39 +94,33 @@ export const toolbox = {
           "kind": "block",
           "type": "lists_create_with"
         },
-        // {
-        //   "kind": "block",
-        //   "type": "ftable"
-        // }
       ]
     },
     {
       kind: "category",
-      name: "Math",
+      name: "Logic",
       contents: [
         {
           kind: "block",
           type: "addition",
         },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Control flow",
-      contents: [
-        {
-          kind: "block",
-          type: "controls_if",
-        },
         {
           kind: "block",
           type: "logic_compare",
         },
+        {
+          kind: "block",
+          type: "controls_if"
+        },
+        {
+          kind: "block",
+          type: "while_loop"
+        }
       ],
     },
     {
       kind: "category",
-      name: "Oscillators",
+      name: "Signal Generators",
       contents: [
         {
           kind: "block",

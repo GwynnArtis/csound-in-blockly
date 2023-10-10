@@ -29,6 +29,10 @@ class CsoundGenerator extends Blockly.CodeGenerator {
 }
 export const csoundGenerator = new CsoundGenerator();
 
+interface ListBlockCount extends Blockly.Block { // for lists_create_with generator
+  itemCount_: number;
+}
+
 const Order = {
   ATOMIC: 0,
   EXPONENTIATION: 1,
@@ -36,6 +40,7 @@ const Order = {
   DIVISION: 3,
   SUBTRACTION: 4,
   ADDITION: 5,
+  NONE: 99
 };
 
 // General block generators
@@ -44,32 +49,36 @@ csoundGenerator.forBlock["instrument"] = function (block, generator) {
   const elements = generator.statementToCode(block, "ELEMENTS");
   const code = `instr ${name}
 ${elements}
-endin`;
+endin
+`;
   return code;
 };
-csoundGenerator.forBlock["out"] = function (block) {
-  const arg1 = block.getField("ARG1").getText(); // gets name of variable for all field types - in this case, field variable
-  const arg2 = block.getField("ARG2").getText();
+csoundGenerator.forBlock["out"] = function (block, generator) {
+  const arg1 = generator.valueToCode(block, "ARG1", Order.ATOMIC); // gets name of variable for all field types - in this case, field variable
+  const arg2 = generator.valueToCode(block, "ARG2", Order.ATOMIC);
   const code = `out ${arg1}, ${arg2}`;
   return code;
 };
 csoundGenerator.forBlock["UDO"] = function (block, generator) {
   const name = block.getFieldValue("NAME");
+  const inArgRate = block.getFieldValue("IN_ARG_RATE");
+  const outArgRate = block.getFieldValue("OUT_ARG_RATE");
   const elements = generator.statementToCode(block, "ELEMENTS");
   // if xin != null then extract input arg rates and add them next to the opcode name
-  const code = `opcode ${name}
+  const code = `opcode ${name} ${inArgRate}, ${outArgRate}
 ${elements}
-endop`;
+endop
+`;
   return code;
 };
 csoundGenerator.forBlock["xin"] = function (block, generator) {
-  const args = generator.statementToCode(block, "ARGS");
+  const args = generator.valueToCode(block, "ARGS", Order.ATOMIC);
   //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
   const code = `${args} xin`;
   return code;
 };
 csoundGenerator.forBlock["xout"] = function (block, generator) {
-  const arg = block.getField("ARG1").getText();
+  const arg = generator.valueToCode(block, "ARG1", Order.ATOMIC);
   //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
   const code = `xout ${arg}`;
   return code;
@@ -82,8 +91,13 @@ csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
   // TODO: figure out where spaces are coming from
-  const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
-  return code;
+  if (!pFields) {
+    const code = `schedule ${instr}, ${start}, ${dur}`;
+    return code;
+  } else {
+    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
+    return code;
+  }
 };
 csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
   const instr = generator.valueToCode(block, "INSTR", Order.ATOMIC);
@@ -92,10 +106,12 @@ csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
   const pFields = generator.statementToCode(block, "PFIELDS");
   // TODO: figure out where spaces are coming from
   if (!pFields) {
-    const code = `schedule ${instr}, ${start}, ${dur}`;
+    const code = `schedule ${instr}, ${start}, ${dur}
+    `;
     return code;
   } else {
-    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
+    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}
+    `;
     return code;
   }
 };
@@ -129,6 +145,13 @@ csoundGenerator.forBlock["math_number"] = function (block) {
   return [code, Order.ATOMIC];
 };
 
+csoundGenerator.forBlock["variables_get_dynamic"] = function (block) {
+  const name = block.getField("VAR").getText();
+  const type = block.getVarModels()[0].type as UpdateRate;
+  const prefix = VAR_RATE_PREFIX[type];
+  const code = `${prefix}${name}`;
+  return [code, Order.ATOMIC];
+};
 csoundGenerator.forBlock["variables_set_dynamic"] = function (
   block,
   generator
@@ -142,6 +165,14 @@ csoundGenerator.forBlock["variables_set_dynamic"] = function (
 };
 
 // Array block generators
+csoundGenerator.forBlock["lists_create_with"] = function (block, generator) {
+  const elements = new Array((block as ListBlockCount).itemCount_);
+  for (let i = 0; i < (block as ListBlockCount).itemCount_; i++) {
+    elements[i] = generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None'; 
+  }
+  const code = `ftgen ` + elements.join(', ') + ``;
+  return [code, Order.ATOMIC];
+};
 
 // Control flow block generators
 csoundGenerator.forBlock["addition"] = function (block, generator) {
@@ -189,34 +220,36 @@ csoundGenerator.forBlock["vco2"] = function (block, generator) {
   const freq = generator.valueToCode(block, "FREQ", Order.ATOMIC);
   const imode = generator.valueToCode(block, "IMODE", Order.ATOMIC);
   if (imode) {
-    const code = `vco2(${amp}, ${freq}, ${imode})`;
+    const code = `vco2:a(${amp}, ${freq}, ${imode})`;
     return [code, Order.ATOMIC];
   } else {
-    const code = `vco2(${amp}, ${freq})`;
+    const code = `vco2:a(${amp}, ${freq})`;
     return [code, Order.ATOMIC];
   }
 };
 csoundGenerator.forBlock["noise"] = function (block, generator) {
   const amp = generator.valueToCode(block, "AMP", Order.ATOMIC);
   const beta = generator.valueToCode(block, "BETA", Order.ATOMIC);
-  const code = `vco2(${amp}, ${beta})`;
+  const code = `noise:a(${amp}, ${beta})`;
   return [code, Order.ATOMIC];
 };
 
 // Envelope block generators
 csoundGenerator.forBlock["linen"] = function (block, generator) {
+  const rate = block.getField("RATE").getText();
   const amp = generator.valueToCode(block, "AMP", Order.ATOMIC);
   const rise = generator.valueToCode(block, "RISE", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const decay = generator.valueToCode(block, "DECAY", Order.ATOMIC);
-  const code = `linen(${amp}, ${rise}, ${dur}, ${decay})`;
+  const code = `linen:${rate}(${amp}, ${rise}, ${dur}, ${decay})`;
   return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["expon"] = function (block, generator) {
+  const rate = block.getField("RATE").getText();
   const start = generator.valueToCode(block, "START", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const end = generator.valueToCode(block, "END", Order.ATOMIC);
-  const code = `expon(${start}, ${dur}, ${end})`;
+  const code = `expon:${rate}(${start}, ${dur}, ${end})`;
   return [code, Order.ATOMIC];
 };
 
@@ -225,7 +258,7 @@ csoundGenerator.forBlock["lowpass"] = function (block, generator) {
   const signal = generator.valueToCode(block, "SIGNAL", Order.ATOMIC);
   const centre_freq = generator.valueToCode(block, "CENTRE_FREQ", Order.ATOMIC);
   const cutoff = generator.valueToCode(block, "CUTOFF", Order.ATOMIC);
-  const code = `lowpass2(${signal}, ${centre_freq}, ${cutoff})`;
+  const code = `lowpass2:a(${signal}, ${centre_freq}, ${cutoff})`;
   return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["highpass"] = function (block, generator) {
@@ -233,10 +266,10 @@ csoundGenerator.forBlock["highpass"] = function (block, generator) {
   const cutoff = generator.valueToCode(block, "CUTOFF", Order.ATOMIC);
   const iskip = generator.valueToCode(block, "ISKIP", Order.ATOMIC);
   if (iskip) {
-    const code = `atone(${signal}, ${cutoff}, ${iskip})`;
+    const code = `atone:a(${signal}, ${cutoff}, ${iskip})`;
     return [code, Order.ATOMIC];
   } else {
-    const code = `atone(${signal}, ${cutoff})`;
+    const code = `atone:a(${signal}, ${cutoff})`;
     return [code, Order.ATOMIC];
   }
 };
@@ -244,7 +277,7 @@ csoundGenerator.forBlock["bandpass"] = function (block, generator) {
   const signal = generator.valueToCode(block, "SIGNAL", Order.ATOMIC);
   const freq = generator.valueToCode(block, "FREQ", Order.ATOMIC);
   const band = generator.valueToCode(block, "BAND", Order.ATOMIC);
-  const code = `butterbp(${signal}, ${freq}, ${band})`;
+  const code = `butterbp:a(${signal}, ${freq}, ${band})`;
   return [code, Order.ATOMIC];
 };
 
@@ -252,13 +285,13 @@ csoundGenerator.forBlock["bandpass"] = function (block, generator) {
 csoundGenerator.forBlock["delay"] = function (block, generator) {
   const signal = generator.valueToCode(block, "SIGNAL", Order.ATOMIC);
   const idlt = generator.valueToCode(block, "DELAY_TIME", Order.ATOMIC);
-  const code = `delay(${signal}, ${idlt})`;
+  const code = `delay:a(${signal}, ${idlt})`;
   return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["reverb"] = function (block, generator) {
   const signal = generator.valueToCode(block, "SIGNAL", Order.ATOMIC);
   const krvt = generator.valueToCode(block, "REVERB_TIME", Order.ATOMIC);
-  const code = `reverb(${signal}, ${krvt})`;
+  const code = `reverb:a(${signal}, ${krvt})`;
   return [code, Order.ATOMIC];
 };
 

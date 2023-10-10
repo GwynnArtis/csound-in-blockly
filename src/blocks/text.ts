@@ -52,13 +52,14 @@ const instrument: any = {
 const out: any = {
   type: "out",
   message0: "out %1 %2",
+  inputsInline: true,
   args0: [
     {
-      type: "field_variable",
+      type: "input_value",
       name: "ARG1",
     },
     {
-      type: "field_variable",
+      type: "input_value",
       name: "ARG2",
     },
   ],
@@ -100,7 +101,7 @@ const xin: any = {
   message0: "inputs: %1", // need to be able to dynamically add connections
   args0: [
     {
-      type: "field_statement",
+      type: "input_value",
       name: "ARGS",
     },
   ],
@@ -115,7 +116,7 @@ const xout: any = {
   message0: "xout %1", // need to be able to dynamically add connections
   args0: [
     {
-      type: "field_variable",
+      type: "input_value",
       name: "ARG1",
     },
   ],
@@ -260,7 +261,7 @@ const variable_set: any = {
   colour: 200,
 };
 
-// Math block definitions
+// Logic block definitions
 const addition: any = {
   type: "addition",
   message0: "%1 %2 %3",
@@ -332,7 +333,7 @@ const oscili: any = {
 };
 const vco2: any = {
   type: "vco2",
-  message0: "vco2 %1 %2 imode? %3", // add more optional arguments
+  message0: "vco2:a %1 %2 imode? %3", // add more optional arguments
   inputsInline: true,
   args0: [
     {
@@ -367,7 +368,7 @@ const vco2: any = {
 };
 const noise: any = {
   type: "noise",
-  message0: "noise %1, %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "noise:a %1 %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -388,9 +389,17 @@ const noise: any = {
 // Envelope block definitions
 const linen: any = {
   type: "linen",
-  message0: "linen %1, %2, %3, %4", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "linen:%1 %2 %3 %4 %5", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
+    {
+      type: "field_dropdown",
+      name: "RATE",
+      options: [
+        ["a", "audio-rate"],
+        ["k", "control-rate"]
+      ]
+    },
     {
       type: "input_value",
       name: "AMP",
@@ -415,9 +424,17 @@ const linen: any = {
 };
 const expon: any = {
   type: "expon",
-  message0: "expon %1, %2, %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "expon:%1 %2 %3 %4", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
+    {
+      type: "field_dropdown",
+      name: "RATE",
+      options: [
+        ["a", "audio-rate"],
+        ["k", "control-rate"]
+      ]
+    },
     {
       type: "input_value",
       name: "START",
@@ -440,7 +457,7 @@ const expon: any = {
 // Filter block definitions
 const lowpass: any = {
   type: "lowpass",
-  message0: "lowpass %1, %2, %3", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "lowpass:a %1 %2 %3", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -463,7 +480,7 @@ const lowpass: any = {
 };
 const highpass: any = {
   type: "highpass",
-  message0: "highpass %1 %2 skip? %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "highpass:a %1 %2 skip? %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -486,7 +503,7 @@ const highpass: any = {
 };
 const bandpass: any = {
   type: "bandpass",
-  message0: "bandpass %1, %2, %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "bandpass:a %1 %2 %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -511,7 +528,7 @@ const bandpass: any = {
 // Delay block definitions
 const delay: any = {
   type: "delay",
-  message0: "delay %1, %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "delay:a %1 %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
   inputsInline: true,
   args0: [
     {
@@ -530,7 +547,7 @@ const delay: any = {
 };
 const reverb: any = {
   type: "reverb",
-  message0: "reverb %1, %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "reverb:a %1 %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   inputsInline: true,
   args0: [
     {
