@@ -291,6 +291,23 @@ const addition: any = {
   colour: 200,
   extensions: ["math_op_tooltip"],
 };
+const while_loop: any = {
+  type: "while_loop",
+  message0: "repeat while %1 do %2",
+  args0: [
+    {
+      type: "input_value",
+      name: "CONDITION",
+    },
+    {
+      type: "input_statement",
+      name: "STATEMENT"
+    }
+  ],
+  colour: 200,
+  previousStatement: null,
+  nextStatement: null,
+}
 
 // Oscillator block definitions
 const oscili: any = {
@@ -652,11 +669,11 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // variable_change, // remove?
   // Arrays
 
-  // Math
+  // Logic
   addition,
-  // Control flow
+  while_loop,
 
-  // Oscillators
+  // Signal Generators
   oscili,
   vco2,
   noise,

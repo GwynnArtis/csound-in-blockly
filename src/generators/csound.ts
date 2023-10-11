@@ -29,7 +29,8 @@ class CsoundGenerator extends Blockly.CodeGenerator {
 }
 export const csoundGenerator = new CsoundGenerator();
 
-interface ListBlockCount extends Blockly.Block { // for lists_create_with generator
+interface ListBlockCount extends Blockly.Block {
+  // for lists_create_with generator
   itemCount_: number;
 }
 
@@ -40,7 +41,8 @@ const Order = {
   DIVISION: 3,
   SUBTRACTION: 4,
   ADDITION: 5,
-  NONE: 99
+  RELATIONAL: 6,
+  NONE: 99,
 };
 
 // General block generators
@@ -133,15 +135,17 @@ csoundGenerator.forBlock["variable_get"] = function (block) {
   return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["variable_set"] = function (block, generator) {
-  // console.log(block, block.getField('NAME')); // testing purposes
   const name = block.getField("NAME").getText();
   const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
   const code = `${name} = ${value}`;
   return code;
 };
-
 csoundGenerator.forBlock["math_number"] = function (block) {
   const code = String(block.getFieldValue("NUM"));
+  return [code, Order.ATOMIC];
+};
+csoundGenerator.forBlock["text"] = function (block) {
+  const code = String(block.getFieldValue("TEXT"));
   return [code, Order.ATOMIC];
 };
 
@@ -168,9 +172,9 @@ csoundGenerator.forBlock["variables_set_dynamic"] = function (
 csoundGenerator.forBlock["lists_create_with"] = function (block, generator) {
   const elements = new Array((block as ListBlockCount).itemCount_);
   for (let i = 0; i < (block as ListBlockCount).itemCount_; i++) {
-    elements[i] = generator.valueToCode(block, 'ADD' + i, Order.NONE) || 'None'; 
+    elements[i] = generator.valueToCode(block, "ADD" + i, Order.NONE) || "None";
   }
-  const code = `ftgen ` + elements.join(', ') + ``;
+  const code = `ftgen ` + elements.join(", ") + ``;
   return [code, Order.ATOMIC];
 };
 
@@ -190,6 +194,71 @@ csoundGenerator.forBlock["addition"] = function (block, generator) {
   const order = tuple[1];
   const code = `${arg1} ${operator} ${arg2}`;
   return [code, order];
+};
+csoundGenerator.forBlock["logic_compare"] = function (block, generator) {
+  const OPERATORS: any = {
+    EQ: "==",
+    NEQ: "!=",
+    LT: "<",
+    LTE: "<=",
+    GT: ">",
+    GTE: ">=",
+  };
+  const operator = OPERATORS[block.getFieldValue("OP")];
+  const order = Order.RELATIONAL;
+  const argument0 = generator.valueToCode(block, "A", order) || "0";
+  const argument1 = generator.valueToCode(block, "B", order) || "0";
+  const code = argument0 + " " + operator + " " + argument1;
+  return [code, order];
+};
+// TODO: change to csound syntax
+csoundGenerator.forBlock["controls_if"] = function (block, generator) {
+  let n = 0;
+  let code = ``;
+  if (generator.STATEMENT_PREFIX) {
+    code += generator.injectId(generator.STATEMENT_PREFIX, block);
+  }
+  do {
+    const conditionCode =
+      generator.valueToCode(block, "IF" + n, Order.NONE) || "false";
+    let branchCode = generator.statementToCode(block, "DO" + n);
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode =
+        generator.prefixLines(
+          generator.injectId(generator.STATEMENT_SUFFIX, block),
+          generator.INDENT
+        ) + branchCode;
+    }
+    code +=
+      (n > 0 ? " else " : "") +
+      "if (" +
+      conditionCode +
+      ") {\n" +
+      branchCode +
+      "}";
+    n++;
+  } while (block.getInput("IF" + n));
+
+  if (block.getInput("ELSE") || generator.STATEMENT_SUFFIX) {
+    let branchCode = generator.statementToCode(block, "ELSE");
+    if (generator.STATEMENT_SUFFIX) {
+      branchCode =
+        generator.prefixLines(
+          generator.injectId(generator.STATEMENT_SUFFIX, block),
+          generator.INDENT
+        ) + branchCode;
+    }
+    code += " else {\n" + branchCode + "}";
+  }
+  return code + "\n";
+};
+csoundGenerator.forBlock["while_loop"] = function (block, generator) {
+  const condition = generator.valueToCode(block, "CONDITION", Order.ATOMIC);
+  const statement = generator.statementToCode(block, "STATEMEENT");
+  const code = `while ${condition} do
+  ${statement}
+  od`;
+  return code;
 };
 
 // Oscillator block generators

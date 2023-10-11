@@ -51,16 +51,16 @@ export const toolbox = {
     },
     {
       kind: "category",
-      name: "Variables",
+      name: "Numbers and Strings",
       contents: [
-        {
-          kind: "block",
-          type: "variable_get",
-        },
-        {
-          kind: "block",
-          type: "variable_set",
-        },
+        // {
+        //   kind: "block",
+        //   type: "variable_get",
+        // },
+        // {
+        //   kind: "block",
+        //   type: "variable_set",
+        // },
         {
           kind: "block",
           type: "math_number",
@@ -73,7 +73,7 @@ export const toolbox = {
     },
     {
       kind: "category",
-      name: "Variables2",
+      name: "Variables",
       custom: "CREATE_TYPED_VARIABLE",
       contents: [
         {
@@ -88,7 +88,7 @@ export const toolbox = {
     },
     {
       "kind": "category",
-      "name": "Arrays and f-tables",
+      "name": "F-tables",
       "contents": [
         {
           "kind": "block",
