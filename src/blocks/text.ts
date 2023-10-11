@@ -344,7 +344,7 @@ const oscili: any = {
     },
   ],
   output: null,
-  colour: 290,
+  colour: 250,
   tooltip: "oscili xamp, xcps[, ifn = -1, iphs = 0]",
   helpUrl: "http://www.csounds.com/manual/html/oscili.html",
 };
@@ -379,7 +379,7 @@ const vco2: any = {
     // },
   ],
   output: null,
-  colour: 290,
+  colour: 250,
   tooltip: "vco2 xamp, xcps[, ifn, iphs]",
   helpUrl: "http://www.csounds.com/manual/html/vco2.html",
 };
@@ -398,7 +398,7 @@ const noise: any = {
     },
   ],
   output: null,
-  colour: 290,
+  colour: 250,
   tooltip: "noise xamp, kbeta",
   helpUrl: "https://csound.com/docs/manual/noise.html",
 };
@@ -435,7 +435,7 @@ const linen: any = {
     },
   ],
   output: null,
-  colour: 330,
+  colour: 250,
   tooltip: "linen xamp, irise, idur, idec",
   helpUrl: "http://www.csounds.com/manual/html/linen.html",
 };
@@ -466,7 +466,7 @@ const expon: any = {
     },
   ],
   output: null,
-  colour: 330,
+  colour: 250,
   tooltip: "expon ia, idur, ib",
   helpUrl: "http://www.csounds.com/manual/html/expon.html",
 };
@@ -491,7 +491,7 @@ const lowpass: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 250,
   tooltip: "lowpass2 asig, kcf, kq",
   helpUrl: "http://www.csounds.com/manual/html/lowpass2.html",
 };
@@ -514,7 +514,7 @@ const highpass: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 250,
   tooltip: "atone asig, khp [, iskip]",
   helpUrl: "http://www.csounds.com/manual/html/atone.html",
 };
@@ -537,7 +537,7 @@ const bandpass: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 250,
   tooltip: "butterbp asig, kcf, xband",
   helpUrl: "http://www.csounds.com/manual/html/butterbp.html",
 };
@@ -558,7 +558,7 @@ const delay: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 250,
   tooltip: "delay asig, idlt",
   helpUrl: "http://www.csounds.com/manual/html/delay.html",
 };
@@ -577,7 +577,7 @@ const reverb: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 250,
   tooltip: "reverb asig, krvt",
   helpUrl: "http://www.csounds.com/manual/html/reverb.html",
 };
@@ -595,7 +595,7 @@ const samplerate: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 50,
   tooltip: "Sets global sample rate",
   helpUrl: "http://www.csounds.com/manual/html/sr.html",
 };
@@ -611,7 +611,7 @@ const ksmps: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 50,
   tooltip: "Sets global number of samples in a control period (k-rate)",
   helpUrl: "http://www.csounds.com/manual/html/ksmps.html",
 };
@@ -627,7 +627,7 @@ const nchnls: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 50,
   tooltip: "Sets global number of channels",
   helpUrl: "http://www.csounds.com/manual/html/nchnls.html",
 };
@@ -643,7 +643,7 @@ const dbfs: any = {
     },
   ],
   output: null,
-  colour: 360,
+  colour: 50,
   tooltip: "Sets the value of 0 decibels using full-scale amplitude",
   helpUrl: "http://www.csounds.com/manual/html/Zerodbfs.html",
 };
@@ -666,7 +666,7 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // Variables
   variable_get,
   variable_set,
-  // variable_change, // remove?
+  // variable_change, 
   // Arrays
 
   // Logic
