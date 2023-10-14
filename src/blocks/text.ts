@@ -113,7 +113,7 @@ export const pFieldSet: any = {
 };
 
 // Setting variables block definitions
-const init: any = {
+export const init: any = {
   type: "init",
   message0: "init %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   args0: [

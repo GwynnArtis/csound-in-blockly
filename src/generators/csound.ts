@@ -1,5 +1,5 @@
 import * as Blockly from "blockly/core";
-import { pFieldSet } from "../blocks/text";
+import { init, pFieldSet } from "../blocks/text";
 import { UPDATE_RATE as UpdateRate } from "src";
 
 const VAR_RATE_PREFIX: { [key in UpdateRate]: string } = {
@@ -96,9 +96,9 @@ csoundGenerator.forBlock["text"] = function (block) {
   return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["init"] = function (block, generator) {
-  const input = generator.valueToCode(block, "VALUE", Order.ATOMIC);
+  const input = generator.valueToCode(block, "ARG", Order.ATOMIC);
   const code = `init ${input}`;
-  return code;
+  return [code, Order.ATOMIC];
 };
 csoundGenerator.forBlock["variables_get_dynamic"] = function (block) {
   const name = block.getField("VAR").getText();
@@ -114,7 +114,12 @@ csoundGenerator.forBlock["variables_set_dynamic"] = function (
   const name = block.getField("VAR").getText();
   const type = block.getVarModels()[0].type as UpdateRate;
   const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
+  console.log(value, block.getInputTargetBlock("VALUE"));
   const prefix = VAR_RATE_PREFIX[type];
+   if (block.getInputTargetBlock("VALUE")?.type == init.type) {
+    const code = `${prefix}${name} ${value}`;
+    return code;
+   }
   const code = `${prefix}${name} = ${value}`;
   return code;
 };
