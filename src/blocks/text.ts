@@ -1,32 +1,6 @@
-/**
- * @license
- * Copyright 2023 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
+/* Custom block definitions */
 
 import * as Blockly from "blockly/core";
-
-const addText: any = {
-  type: "add_text",
-  message0: "Add text %1 with color %2",
-  args0: [
-    {
-      type: "input_value",
-      name: "TEXT",
-      check: "String",
-    },
-    {
-      type: "input_value",
-      name: "COLOR",
-      check: "Colour",
-    },
-  ],
-  previousStatement: null,
-  nextStatement: null,
-  colour: 160,
-  tooltip: "",
-  helpUrl: "",
-};
 
 // General block definitions
 const instrument: any = {
@@ -68,68 +42,8 @@ const out: any = {
   tooltip: "instrument block", // change later
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
-const UDO: any = {
-  type: "UDO",
-  message0: "opcode %1 %2, %3", // ideally, the translator will automatically fill in the input/output rates
-  args0: [
-    {
-      type: "field_input", // might change to variable name?
-      name: "NAME",
-    },
-    {
-      type: "field_input",
-      name: "IN_ARG_RATE",
-    },
-    {
-      type: "field_input",
-      name: "OUT_ARG_RATE",
-    },
-  ],
-  message1: "%1 endop",
-  args1: [
-    {
-      type: "input_statement",
-      name: "ELEMENTS",
-    },
-  ],
-  colour: 20,
-  tooltip: "user-defined opcode", // change later
-  helpUrl: "https://csound.com/docs/manual/OrchUDO.html",
-};
-const xin: any = {
-  type: "xin",
-  message0: "inputs: %1", // need to be able to dynamically add connections
-  args0: [
-    {
-      type: "input_value",
-      name: "ARGS",
-    },
-  ],
-  previousStatement: null,
-  nextStatement: null,
-  colour: 20,
-  tooltip: "instrument block", // change later
-  helpUrl: "https://csound.com/docs/manual/instr.html",
-};
-const xout: any = {
-  type: "xout",
-  message0: "xout %1", // need to be able to dynamically add connections
-  args0: [
-    {
-      type: "input_value",
-      name: "ARG1",
-    },
-  ],
-  previousStatement: null,
-  nextStatement: null,
-  colour: 20,
-  tooltip: "instrument block", // change later
-  helpUrl: "https://csound.com/docs/manual/instr.html",
-};
-
-// Performance block definitions
-const scheduleInInstr: any = {
-  type: "schedule_in_instr",
+const schedule: any = {
+  type: "schedule",
   message0: "play instr: %1, start: %2, dur: %3", // need to add dynamic resizing
   inputsInline: true,
   args0: [
@@ -155,37 +69,7 @@ const scheduleInInstr: any = {
   ],
   previousStatement: null, // might add 'schedule_in_block' separately and put these lines in there instead
   nextStatement: null,
-  colour: 160,
-  tooltip:
-    "Plays an instance of a specified instrument at given start and duration times. Use p-fields as additional arguments",
-  helpUrl: "http://www.csounds.com/manual/html/schedule.html",
-};
-const scheduleGlobally: any = {
-  type: "schedule_global",
-  message0: "play instr: %1, start: %2, dur: %3", // need to add dynamic resizing
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "INSTR",
-    },
-    {
-      type: "input_value",
-      name: "START",
-    },
-    {
-      type: "input_value",
-      name: "DUR",
-    },
-  ],
-  message1: "p-fields %1",
-  args1: [
-    {
-      type: "input_statement",
-      name: "PFIELDS",
-    },
-  ],
-  colour: 160,
+  colour: 100,
   tooltip:
     "Plays an instance of a specified instrument at given start and duration times. Use p-fields as additional arguments",
   helpUrl: "http://www.csounds.com/manual/html/schedule.html",
@@ -202,7 +86,7 @@ const pField: any = {
     },
   ],
   output: null,
-  colour: 160,
+  colour: 100,
   tooltip: "instrument block", // change later
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
@@ -223,42 +107,25 @@ export const pFieldSet: any = {
   ],
   nextStatement: null,
   previousStatement: null,
-  colour: 160,
+  colour: 100,
   tooltip: "instrument block", // change later
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
 
-// Variable block definitions
-const variable_get: any = {
-  type: "variable_get",
-  message0: "%1",
+// Setting variables block definitions
+const init: any = {
+  type: "init",
+  message0: "init %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
   args0: [
-    {
-      type: "field_variable",
-      name: "NAME", // Static name of the field
-      variable: "%{BKY_VARIABLES_DEFAULT_NAME}", // Given at runtime
-    },
-  ],
-  output: null, // Null means the return value can be of any type
-  colour: 200,
-};
-const variable_set: any = {
-  type: "variable_set",
-  message0: "set %1 to %2",
-  args0: [
-    {
-      type: "field_variable",
-      name: "NAME",
-      variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
-    },
     {
       type: "input_value",
-      name: "VALUE",
-    },
+      name: "ARG",
+    }
   ],
-  previousStatement: null,
-  nextStatement: null,
-  colour: 200,
+  output: null,
+  colour: 160,
+  tooltip: "Assigns value of i-time input to i-, k-, or a-rate outputt",
+  helpUrl: "https://csound.com/docs/manual/init.html",
 };
 
 // Logic block definitions
@@ -347,41 +214,6 @@ const oscili: any = {
   colour: 250,
   tooltip: "oscili xamp, xcps[, ifn = -1, iphs = 0]",
   helpUrl: "http://www.csounds.com/manual/html/oscili.html",
-};
-const vco2: any = {
-  type: "vco2",
-  message0: "vco2:a %1 %2 imode? %3", // add more optional arguments
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "AMP",
-    },
-    {
-      type: "input_value",
-      name: "FREQ",
-    },
-    {
-      type: "input_value",
-      name: "IMODE",
-    },
-    // {
-    //   type: "input_value",
-    //   name: "KPW",
-    // },
-    // {
-    //   type: "input_value",
-    //   name: "KPHS",
-    // },
-    // {
-    //   type: "input_value",
-    //   name: "INYX",
-    // },
-  ],
-  output: null,
-  colour: 250,
-  tooltip: "vco2 xamp, xcps[, ifn, iphs]",
-  helpUrl: "http://www.csounds.com/manual/html/vco2.html",
 };
 const noise: any = {
   type: "noise",
@@ -582,72 +414,6 @@ const reverb: any = {
   helpUrl: "http://www.csounds.com/manual/html/reverb.html",
 };
 
-// Global constants block definitions
-const samplerate: any = {
-  type: "samplerate",
-  message0: "sr = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "SR",
-      check: "number",
-    },
-  ],
-  output: null,
-  colour: 50,
-  tooltip: "Sets global sample rate",
-  helpUrl: "http://www.csounds.com/manual/html/sr.html",
-};
-const ksmps: any = {
-  type: "ksmps",
-  message0: "ksmps = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "KSMPS",
-      check: "number",
-    },
-  ],
-  output: null,
-  colour: 50,
-  tooltip: "Sets global number of samples in a control period (k-rate)",
-  helpUrl: "http://www.csounds.com/manual/html/ksmps.html",
-};
-const nchnls: any = {
-  type: "nchnls",
-  message0: "nchnls = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "NHCNLS",
-      check: "number",
-    },
-  ],
-  output: null,
-  colour: 50,
-  tooltip: "Sets global number of channels",
-  helpUrl: "http://www.csounds.com/manual/html/nchnls.html",
-};
-const dbfs: any = {
-  type: "0dbfs",
-  message0: "0dbfs = %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
-  inputsInline: true,
-  args0: [
-    {
-      type: "input_value",
-      name: "DBFS",
-      check: "number",
-    },
-  ],
-  output: null,
-  colour: 50,
-  tooltip: "Sets the value of 0 decibels using full-scale amplitude",
-  helpUrl: "http://www.csounds.com/manual/html/Zerodbfs.html",
-};
-
 // Create the block definitions for the JSON-only blocks.
 // This does not register their definitions with Blockly.
 // This file has no side effects!
@@ -655,27 +421,16 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // General
   instrument,
   out,
-  UDO,
-  xin,
-  xout,
-  // Performance
-  scheduleInInstr,
-  scheduleGlobally,
+  schedule,
   pField,
   pFieldSet,
   // Variables
-  variable_get,
-  variable_set,
-  // variable_change, 
-  // Arrays
-
+  init,
   // Logic
   addition,
   while_loop,
-
   // Signal Generators
   oscili,
-  vco2,
   noise,
   // Envelopes
   linen,
@@ -687,9 +442,4 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // Delays
   delay,
   reverb,
-  // Constants
-  samplerate,
-  ksmps,
-  nchnls,
-  dbfs,
 ]);

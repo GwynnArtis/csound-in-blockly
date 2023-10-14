@@ -6,7 +6,7 @@ export const toolbox = {
       name: "General",
       contents: [
         {
-          kind: "block", // need to create custom blocks
+          kind: "block", 
           type: "instrument",
         },
         {
@@ -15,29 +15,7 @@ export const toolbox = {
         },
         {
           kind: "block",
-          type: "UDO",
-        },
-        {
-          kind: "block",
-          type: "xin",
-        },
-        {
-          kind: "block",
-          type: "xout",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Performance",
-      contents: [
-        {
-          kind: "block",
-          type: "schedule_in_instr",
-        },
-        { 
-          "kind": "block",
-          "type": "schedule_global"
+          type: "schedule",
         },
         {
           kind: "block",
@@ -51,16 +29,12 @@ export const toolbox = {
     },
     {
       kind: "category",
-      name: "Numbers and Strings",
+      name: "Setting variables",
       contents: [
-        // {
-        //   kind: "block",
-        //   type: "variable_get",
-        // },
-        // {
-        //   kind: "block",
-        //   type: "variable_set",
-        // },
+        {
+          kind: "block",
+          type: "init"
+        },
         {
           kind: "block",
           type: "math_number",
@@ -128,10 +102,6 @@ export const toolbox = {
         },
         {
           kind: "block",
-          type: "vco2",
-        },
-        {
-          kind: "block",
           type: "noise",
         },
       ],
@@ -182,27 +152,27 @@ export const toolbox = {
         },
       ],
     },
-    {
-      kind: "category",
-      name: "Constants",
-      contents: [
-        {
-          kind: "block",
-          type: "samplerate",
-        },
-        {
-          kind: "block",
-          type: "ksmps",
-        },
-        {
-          kind: "block",
-          type: "nchnls",
-        },
-        {
-          kind: "block",
-          type: "0dbfs"
-        },
-      ],
-    },
+    // {
+    //   kind: "category",
+    //   name: "Constants",
+    //   contents: [
+    //     {
+    //       kind: "block",
+    //       type: "samplerate",
+    //     },
+    //     {
+    //       kind: "block",
+    //       type: "ksmps",
+    //     },
+    //     {
+    //       kind: "block",
+    //       type: "nchnls",
+    //     },
+    //     {
+    //       kind: "block",
+    //       type: "0dbfs"
+    //     },
+    //   ],
+    // },
   ],
 };

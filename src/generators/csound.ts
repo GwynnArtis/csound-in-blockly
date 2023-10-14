@@ -61,33 +61,7 @@ csoundGenerator.forBlock["out"] = function (block, generator) {
   const code = `out ${arg1}, ${arg2}`;
   return code;
 };
-csoundGenerator.forBlock["UDO"] = function (block, generator) {
-  const name = block.getFieldValue("NAME");
-  const inArgRate = block.getFieldValue("IN_ARG_RATE");
-  const outArgRate = block.getFieldValue("OUT_ARG_RATE");
-  const elements = generator.statementToCode(block, "ELEMENTS");
-  // if xin != null then extract input arg rates and add them next to the opcode name
-  const code = `opcode ${name} ${inArgRate}, ${outArgRate}
-${elements}
-endop
-`;
-  return code;
-};
-csoundGenerator.forBlock["xin"] = function (block, generator) {
-  const args = generator.valueToCode(block, "ARGS", Order.ATOMIC);
-  //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
-  const code = `${args} xin`;
-  return code;
-};
-csoundGenerator.forBlock["xout"] = function (block, generator) {
-  const arg = generator.valueToCode(block, "ARG1", Order.ATOMIC);
-  //const value = generator.valueToCode(block, 'VALUES', Order.ATOMIC);
-  const code = `xout ${arg}`;
-  return code;
-};
-
-// Performance block generators
-csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
+csoundGenerator.forBlock["schedule"] = function (block, generator) {
   const instr = generator.valueToCode(block, "INSTR", Order.ATOMIC);
   const start = generator.valueToCode(block, "START", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
@@ -98,22 +72,6 @@ csoundGenerator.forBlock["schedule_in_instr"] = function (block, generator) {
     return code;
   } else {
     const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
-    return code;
-  }
-};
-csoundGenerator.forBlock["schedule_global"] = function (block, generator) {
-  const instr = generator.valueToCode(block, "INSTR", Order.ATOMIC);
-  const start = generator.valueToCode(block, "START", Order.ATOMIC);
-  const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
-  const pFields = generator.statementToCode(block, "PFIELDS");
-  // TODO: figure out where spaces are coming from
-  if (!pFields) {
-    const code = `schedule ${instr}, ${start}, ${dur}
-    `;
-    return code;
-  } else {
-    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}
-    `;
     return code;
   }
 };
@@ -129,17 +87,6 @@ csoundGenerator.forBlock["pfield_set"] = function (block, generator) {
 };
 
 // Variable block generators
-csoundGenerator.forBlock["variable_get"] = function (block) {
-  const name = block.getField("NAME").getText();
-  const code = `${name}`;
-  return [code, Order.ATOMIC];
-};
-csoundGenerator.forBlock["variable_set"] = function (block, generator) {
-  const name = block.getField("NAME").getText();
-  const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
-  const code = `${name} = ${value}`;
-  return code;
-};
 csoundGenerator.forBlock["math_number"] = function (block) {
   const code = String(block.getFieldValue("NUM"));
   return [code, Order.ATOMIC];
@@ -148,7 +95,11 @@ csoundGenerator.forBlock["text"] = function (block) {
   const code = String(block.getFieldValue("TEXT"));
   return [code, Order.ATOMIC];
 };
-
+csoundGenerator.forBlock["init"] = function (block, generator) {
+  const input = generator.valueToCode(block, "VALUE", Order.ATOMIC);
+  const code = `init ${input}`;
+  return code;
+};
 csoundGenerator.forBlock["variables_get_dynamic"] = function (block) {
   const name = block.getField("VAR").getText();
   const type = block.getVarModels()[0].type as UpdateRate;
