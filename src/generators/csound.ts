@@ -114,12 +114,11 @@ csoundGenerator.forBlock["variables_set_dynamic"] = function (
   const name = block.getField("VAR").getText();
   const type = block.getVarModels()[0].type as UpdateRate;
   const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
-  console.log(value, block.getInputTargetBlock("VALUE"));
   const prefix = VAR_RATE_PREFIX[type];
-   if (block.getInputTargetBlock("VALUE")?.type == init.type) {
+  if (block.getInputTargetBlock("VALUE")?.type == init.type) { // '=' not necessary with 'init' keyword
     const code = `${prefix}${name} ${value}`;
     return code;
-   }
+  }
   const code = `${prefix}${name} = ${value}`;
   return code;
 };
@@ -167,8 +166,8 @@ csoundGenerator.forBlock["logic_compare"] = function (block, generator) {
   const code = argument0 + " " + operator + " " + argument1;
   return [code, order];
 };
-// TODO: change to csound syntax
-csoundGenerator.forBlock["controls_if"] = function (block, generator) {
+// altered from Javascript generator: https://github.com/google/blockly/blob/1e3b5b4c76f24d2274ef4947c1fcf657f0058f11/generators/javascript/logic.js
+csoundGenerator.forBlock["controls_if"] = function (block, generator) { 
   let n = 0;
   let code = ``;
   if (generator.STATEMENT_PREFIX) {
@@ -186,12 +185,11 @@ csoundGenerator.forBlock["controls_if"] = function (block, generator) {
         ) + branchCode;
     }
     code +=
-      (n > 0 ? " else " : "") +
+      (n > 0 ? "\n else" : "") +
       "if (" +
       conditionCode +
-      ") {\n" +
-      branchCode +
-      "}";
+      ") then \n" +
+      branchCode;
     n++;
   } while (block.getInput("IF" + n));
 
@@ -204,9 +202,9 @@ csoundGenerator.forBlock["controls_if"] = function (block, generator) {
           generator.INDENT
         ) + branchCode;
     }
-    code += " else {\n" + branchCode + "}";
+    code += "\n else \n" + branchCode + "";
   }
-  return code + "\n";
+  return code + "\n endif";
 };
 csoundGenerator.forBlock["while_loop"] = function (block, generator) {
   const condition = generator.valueToCode(block, "CONDITION", Order.ATOMIC);
@@ -237,18 +235,6 @@ csoundGenerator.forBlock["oscili"] = function (block, generator) {
     return [code, Order.ATOMIC];
   } else {
     const code = `oscili:${rate}(${amp}, ${freq})`;
-    return [code, Order.ATOMIC];
-  }
-};
-csoundGenerator.forBlock["vco2"] = function (block, generator) {
-  const amp = generator.valueToCode(block, "AMP", Order.ATOMIC);
-  const freq = generator.valueToCode(block, "FREQ", Order.ATOMIC);
-  const imode = generator.valueToCode(block, "IMODE", Order.ATOMIC);
-  if (imode) {
-    const code = `vco2:a(${amp}, ${freq}, ${imode})`;
-    return [code, Order.ATOMIC];
-  } else {
-    const code = `vco2:a(${amp}, ${freq})`;
     return [code, Order.ATOMIC];
   }
 };
