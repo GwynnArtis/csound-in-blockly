@@ -6,6 +6,7 @@ const VAR_RATE_PREFIX: { [key in UpdateRate]: string } = {
   "audio-rate": "a",
   "control-rate": "k",
   "init-rate": "i",
+  "global_rate": "g",
 };
 
 class CsoundGenerator extends Blockly.CodeGenerator {
@@ -100,6 +101,21 @@ csoundGenerator.forBlock["init"] = function (block, generator) {
   const code = `init ${input}`;
   return [code, Order.ATOMIC];
 };
+csoundGenerator.forBlock["global_variable_get"] = function (block) {
+  const name = block.getField("NAME").getText();
+  const prefix = VAR_RATE_PREFIX["global_rate"];
+  const code = `${prefix}i${name}`; // for global i-rate f-tables
+  return [code, Order.ATOMIC];
+};
+csoundGenerator.forBlock["global_variable_set"] = function (block, generator) {
+  const name = block.getField("NAME").getText();
+  const value = generator.valueToCode(block, "VALUE", Order.ATOMIC);
+  const prefix = VAR_RATE_PREFIX["global_rate"];
+  const code = `${prefix}i${name} ${value}`; // for global i-rate f-tables
+  return code;
+};
+
+// Variable block generators
 csoundGenerator.forBlock["variables_get_dynamic"] = function (block) {
   const name = block.getField("VAR").getText();
   const type = block.getVarModels()[0].type as UpdateRate;

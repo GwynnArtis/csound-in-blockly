@@ -22,7 +22,8 @@ import {
 export const A_RATE = "audio-rate";
 export const K_RATE = "control-rate";
 export const I_RATE = "init-rate";
-export type UPDATE_RATE = typeof A_RATE | typeof K_RATE | typeof I_RATE;
+export const G_RATE = "global_rate";
+export type UPDATE_RATE = typeof A_RATE | typeof K_RATE | typeof I_RATE | typeof G_RATE;
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
@@ -100,7 +101,8 @@ if (ws) {
   const typedVarModal = new TypedVariableModal(ws, "callbackName", [
     ["a-rate", A_RATE],
     ["k-rate", K_RATE],
-    ["i-rate", I_RATE]
+    ["i-rate", I_RATE],
+    ["g_rate", G_RATE],
   ]);
   typedVarModal.init();
 }

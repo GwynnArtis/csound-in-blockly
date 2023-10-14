@@ -42,7 +42,15 @@ export const toolbox = {
         {
           kind: "block",
           type: "text",
-        }
+        },
+        {
+          kind: "block",
+          type: "global_variable_set"
+        },
+        {
+          kind: "block",
+          type: "global_variable_get"
+        },
       ],
     },
     {

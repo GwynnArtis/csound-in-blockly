@@ -122,10 +122,41 @@ export const init: any = {
       name: "ARG",
     }
   ],
-  output: null,
   colour: 160,
+  output: null,
   tooltip: "Assigns value of i-time input to i-, k-, or a-rate outputt",
   helpUrl: "https://csound.com/docs/manual/init.html",
+};
+const global_variable_get: any = {
+  type: "global_variable_get",
+  message0: "%1",
+  args0: [
+    {
+      type: "field_variable",
+      name: "NAME", 
+      variable: "%{BKY_VARIABLES_DEFAULT_NAME}", 
+    },
+  ],
+  colour: 160,
+  output: null, 
+};
+const global_variable_set: any = {
+  type: "global_variable_set",
+  message0: "set %1 to %2",
+  args0: [
+    {
+      type: "field_variable",
+      name: "NAME",
+      variable: "%{BKY_VARIABLES_DEFAULT_NAME}",
+    },
+    {
+      type: "input_value",
+      name: "VALUE",
+    },
+  ],
+  colour: 160,
+  previousStatement: null,
+  nextStatement: null,
 };
 
 // Logic block definitions
@@ -426,6 +457,8 @@ export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   pFieldSet,
   // Variables
   init,
+  global_variable_get,
+  global_variable_set,
   // Logic
   addition,
   while_loop,
