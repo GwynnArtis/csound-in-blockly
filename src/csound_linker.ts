@@ -50,15 +50,6 @@ function handleMessage(message: string) {
     count += 1;
 };
 
-// async function copyUrlToLocal(src, dest) {
-//     // fetch the file
-//     let srcfile = await fetch(src)
-//     // get the file data as an array
-//     let dat = await srcfile.arrayBuffer();
-//     // write the data as a new file in the filesystem
-//     await csound.fs.writeFile(dest, new Uint8Array(dat));
-// }
-
 async function copyStringToLocal(string: string, dest: string) {
     let dat = new TextEncoder().encode(string);
     // write the data as a new file in the filesystem

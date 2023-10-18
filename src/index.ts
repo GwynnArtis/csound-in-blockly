@@ -43,7 +43,7 @@ const runCode = () => {
 
 const blocklyToCsound = () => {
   const instr = csoundGenerator.workspaceToCode(ws);
-  const csd = generateCsd(instr, " "); // hardcoded for now
+  const csd = generateCsd(instr, " "); // hardcoded for now - capacity for generating CsScore exists, but not on the Blockly side for this version
   loadCsdFromString(csd);
 };
 
@@ -53,7 +53,7 @@ document.getElementById("pause").addEventListener("click", pause);
 document.getElementById("rewind").addEventListener("click", rewind);
 document
   .getElementById("clearWS")
-  .addEventListener("click", () => window.localStorage.clear());
+  .addEventListener("click", () => window.localStorage.clear()); // for resetting BlockSound if encountering an error or bug that glitches the local storage
 
 // custom typed variable function
 const createFlyout = function (workspace: Blockly.Workspace) {
@@ -102,7 +102,6 @@ if (ws) {
     ["a-rate", A_RATE],
     ["k-rate", K_RATE],
     ["i-rate", I_RATE],
-    ["g_rate", G_RATE],
   ]);
   typedVarModal.init();
 }

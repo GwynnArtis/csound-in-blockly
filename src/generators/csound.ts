@@ -321,5 +321,3 @@ csoundGenerator.forBlock["reverb"] = function (block, generator) {
   const code = `reverb:a(${signal}, ${krvt})`;
   return [code, Order.ATOMIC];
 };
-
-// Constants block generators

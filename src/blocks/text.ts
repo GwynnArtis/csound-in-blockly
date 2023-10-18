@@ -8,7 +8,7 @@ const instrument: any = {
   message0: "instr %1",
   args0: [
     {
-      type: "field_input",
+      type: "field_input", // can accept numbers and letters
       name: "NAME",
     },
   ],
@@ -20,7 +20,7 @@ const instrument: any = {
     },
   ],
   colour: 160,
-  tooltip: "instrument block", // change later
+  tooltip: "instrument block", 
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
 const out: any = {
@@ -39,12 +39,12 @@ const out: any = {
   ],
   previousStatement: null,
   colour: 160,
-  tooltip: "instrument block", // change later
+  tooltip: "out opcode that sends signals defined in instrument blocks to the output", 
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
 const schedule: any = {
   type: "schedule",
-  message0: "play instr: %1, start: %2, dur: %3", // need to add dynamic resizing
+  message0: "play instr: %1, start: %2, dur: %3", 
   inputsInline: true,
   args0: [
     {
@@ -67,7 +67,7 @@ const schedule: any = {
       name: "PFIELDS",
     },
   ],
-  previousStatement: null, // might add 'schedule_in_block' separately and put these lines in there instead
+  previousStatement: null, // allows user to put schedule statements inside instrument blocks
   nextStatement: null,
   colour: 100,
   tooltip:
@@ -87,7 +87,7 @@ const pField: any = {
   ],
   output: null,
   colour: 100,
-  tooltip: "instrument block", // change later
+  tooltip: "p-field block to use as an argument in opcode/function blocks", 
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
 export const pFieldSet: any = {
@@ -108,14 +108,14 @@ export const pFieldSet: any = {
   nextStatement: null,
   previousStatement: null,
   colour: 100,
-  tooltip: "instrument block", // change later
+  tooltip: "set p-field values in schedule statement blocks", 
   helpUrl: "https://csound.com/docs/manual/instr.html",
 };
 
 // Setting variables block definitions
 export const init: any = {
   type: "init",
-  message0: "init %1", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "init %1", 
   args0: [
     {
       type: "input_value",
