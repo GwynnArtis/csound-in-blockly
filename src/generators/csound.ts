@@ -1,15 +1,18 @@
+// Custom Language Generator - translates users's blocks in code editor into Csound syntax (Does not evaluate Csound code - this happens via csound_linker.ts)
+
 import * as Blockly from "blockly/core";
 import { init, pFieldSet } from "../blocks/text";
 import { UPDATE_RATE as UpdateRate } from "src";
 
-const VAR_RATE_PREFIX: { [key in UpdateRate]: string } = {
+const VAR_RATE_PREFIX: { [key in UpdateRate]: string } = { 
+  // for dynamic variable block generators
   "audio-rate": "a",
   "control-rate": "k",
   "init-rate": "i",
   "global_rate": "g",
 };
 
-class CsoundGenerator extends Blockly.CodeGenerator {
+class CsoundGenerator extends Blockly.CodeGenerator { // declare and define custom language generator
   inlineBlocks = [pFieldSet.type];
   constructor() {
     super("CsoundGenerator");
@@ -57,7 +60,7 @@ endin
   return code;
 };
 csoundGenerator.forBlock["out"] = function (block, generator) {
-  const arg1 = generator.valueToCode(block, "ARG1", Order.ATOMIC); // gets name of variable for all field types - in this case, field variable
+  const arg1 = generator.valueToCode(block, "ARG1", Order.ATOMIC); 
   const arg2 = generator.valueToCode(block, "ARG2", Order.ATOMIC);
   const code = `out ${arg1}, ${arg2}`;
   return code;
@@ -67,7 +70,6 @@ csoundGenerator.forBlock["schedule"] = function (block, generator) {
   const start = generator.valueToCode(block, "START", Order.ATOMIC);
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
-  // TODO: figure out where spaces are coming from
   if (!pFields) {
     const code = `schedule ${instr}, ${start}, ${dur}`;
     return code;
@@ -87,7 +89,7 @@ csoundGenerator.forBlock["pfield_set"] = function (block, generator) {
   return code;
 };
 
-// Variable block generators
+// Setting Variable block generators
 csoundGenerator.forBlock["math_number"] = function (block) {
   const code = String(block.getFieldValue("NUM"));
   return [code, Order.ATOMIC];
@@ -139,7 +141,7 @@ csoundGenerator.forBlock["variables_set_dynamic"] = function (
   return code;
 };
 
-// Array block generators
+// F-table block generators
 csoundGenerator.forBlock["lists_create_with"] = function (block, generator) {
   const elements = new Array((block as ListBlockCount).itemCount_);
   for (let i = 0; i < (block as ListBlockCount).itemCount_; i++) {
@@ -149,7 +151,7 @@ csoundGenerator.forBlock["lists_create_with"] = function (block, generator) {
   return [code, Order.ATOMIC];
 };
 
-// Control flow block generators
+// Logic block generators
 csoundGenerator.forBlock["addition"] = function (block, generator) {
   const arg1 = generator.valueToCode(block, "A", Order.ATOMIC);
   const arg2 = generator.valueToCode(block, "B", Order.ATOMIC);
@@ -231,13 +233,14 @@ csoundGenerator.forBlock["while_loop"] = function (block, generator) {
   return code;
 };
 
-// Oscillator block generators
+// Signal Generator block generators
 csoundGenerator.forBlock["oscili"] = function (block, generator) {
   const rate = block.getField("RATE").getText();
   const amp = generator.valueToCode(block, "AMP", Order.ATOMIC);
   const freq = generator.valueToCode(block, "FREQ", Order.ATOMIC);
   const ifn = generator.valueToCode(block, "IFN", Order.ATOMIC);
   const iphs = generator.valueToCode(block, "IPHS", Order.ATOMIC);
+  // conditions for optional arguments (adds default if 4th argument is set but not 3rd)
   if (iphs) {
     if (ifn) {
       const code = `oscili:${rate}(${amp}, ${freq}, ${ifn}, ${iphs})`;
@@ -292,6 +295,7 @@ csoundGenerator.forBlock["highpass"] = function (block, generator) {
   const signal = generator.valueToCode(block, "SIGNAL", Order.ATOMIC);
   const cutoff = generator.valueToCode(block, "CUTOFF", Order.ATOMIC);
   const iskip = generator.valueToCode(block, "ISKIP", Order.ATOMIC);
+  // conditions for optional argument
   if (iskip) {
     const code = `atone:a(${signal}, ${cutoff}, ${iskip})`;
     return [code, Order.ATOMIC];

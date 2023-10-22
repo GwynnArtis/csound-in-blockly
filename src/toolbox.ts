@@ -160,27 +160,5 @@ export const toolbox = {
         },
       ],
     },
-    // {
-    //   kind: "category",
-    //   name: "Constants",
-    //   contents: [
-    //     {
-    //       kind: "block",
-    //       type: "samplerate",
-    //     },
-    //     {
-    //       kind: "block",
-    //       type: "ksmps",
-    //     },
-    //     {
-    //       kind: "block",
-    //       type: "nchnls",
-    //     },
-    //     {
-    //       kind: "block",
-    //       type: "0dbfs"
-    //     },
-    //   ],
-    // },
   ],
 };

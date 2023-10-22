@@ -1,10 +1,12 @@
+// Generates csd file from Blockly code, and then compiles and plays code. Functions added to load, play, pause, and rewind score
+// Based on 'Stria.js' example from vlazzarini's Vanilla Guide to Csound WASM: https://github.com/vlazzarini/vanilla/blob/main/6.Stria/index.html
+
 import { Csound, CsoundObj } from "@csound/browser";
 let csound: CsoundObj | null = null;
 
 let isLoaded = false;
 let isOn = false;
 let isStarted = false;
-//const csd = './csoundTestFile.csd'
 
 export async function loadCsdFromString(string: string) {
     await loadCsound(true);
@@ -12,7 +14,6 @@ export async function loadCsdFromString(string: string) {
     isLoaded = true;
 }
 
-// TODO: redo start() function to be clearer
 export async function start() {
     await loadCsound();
     if (isLoaded && !isStarted) {

@@ -8,7 +8,7 @@ const instrument: any = {
   message0: "instr %1",
   args0: [
     {
-      type: "field_input", // can accept numbers and letters
+      type: "field_input", 
       name: "NAME",
     },
   ],
@@ -67,7 +67,7 @@ const schedule: any = {
       name: "PFIELDS",
     },
   ],
-  previousStatement: null, // allows user to put schedule statements inside instrument blocks
+  previousStatement: null, // allows user to put schedule statements inside instrument blocks, but also works when declared globally
   nextStatement: null,
   colour: 100,
   tooltip:
@@ -92,7 +92,7 @@ const pField: any = {
 };
 export const pFieldSet: any = {
   type: "pfield_set",
-  message0: "p%1 = %2",
+  message0: "set p%1 to %2",
   args0: [
     {
       type: "field_number",
@@ -124,11 +124,11 @@ export const init: any = {
   ],
   colour: 160,
   output: null,
-  tooltip: "Assigns value of i-time input to i-, k-, or a-rate outputt",
+  tooltip: "Assigns value of i-time input to i-, k-, or a-rate output",
   helpUrl: "https://csound.com/docs/manual/init.html",
 };
 const global_variable_get: any = {
-  type: "global_variable_get",
+  type: "global_variable_get", // for f-tables specifically
   message0: "%1",
   args0: [
     {
@@ -141,7 +141,7 @@ const global_variable_get: any = {
   output: null, 
 };
 const global_variable_set: any = {
-  type: "global_variable_set",
+  type: "global_variable_set", // for f-tables specifically 
   message0: "set %1 to %2",
   args0: [
     {
@@ -155,8 +155,6 @@ const global_variable_set: any = {
     },
   ],
   colour: 160,
-  previousStatement: null,
-  nextStatement: null,
 };
 
 // Logic block definitions
@@ -207,10 +205,10 @@ const while_loop: any = {
   nextStatement: null,
 }
 
-// Oscillator block definitions
+// Signal Generator block definitions
 const oscili: any = {
   type: "oscili",
-  message0: "oscili:%1 %2 %3", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "oscili:%1 %2 %3", 
   inputsInline: true,
   args0: [
     {
@@ -230,7 +228,7 @@ const oscili: any = {
       name: "FREQ",
     },
   ],
-  message1: "ifn? %1 iphs? %2",
+  message1: "ifn? %1 iphs? %2", // optional arguments are hard-coded but optional to the user 
   args1: [
     {
       type: "input_value",
@@ -248,7 +246,7 @@ const oscili: any = {
 };
 const noise: any = {
   type: "noise",
-  message0: "noise:a %1 %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "noise:a %1 %2", 
   inputsInline: true,
   args0: [
     {
@@ -269,7 +267,7 @@ const noise: any = {
 // Envelope block definitions
 const linen: any = {
   type: "linen",
-  message0: "linen:%1 %2 %3 %4 %5", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "linen:%1 %2 %3 %4 %5", 
   inputsInline: true,
   args0: [
     {
@@ -304,7 +302,7 @@ const linen: any = {
 };
 const expon: any = {
   type: "expon",
-  message0: "expon:%1 %2 %3 %4", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "expon:%1 %2 %3 %4", 
   inputsInline: true,
   args0: [
     {
@@ -337,7 +335,7 @@ const expon: any = {
 // Filter block definitions
 const lowpass: any = {
   type: "lowpass",
-  message0: "lowpass:a %1 %2 %3", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "lowpass:a %1 %2 %3", 
   inputsInline: true,
   args0: [
     {
@@ -360,7 +358,7 @@ const lowpass: any = {
 };
 const highpass: any = {
   type: "highpass",
-  message0: "highpass:a %1 %2 skip? %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "highpass:a %1 %2 skip? %3", // 'highpass' instead of 'tone' to convey clearer meaning to user
   inputsInline: true,
   args0: [
     {
@@ -383,7 +381,7 @@ const highpass: any = {
 };
 const bandpass: any = {
   type: "bandpass",
-  message0: "bandpass:a %1 %2 %3", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "bandpass:a %1 %2 %3", 
   inputsInline: true,
   args0: [
     {
@@ -408,7 +406,7 @@ const bandpass: any = {
 // Delay block definitions
 const delay: any = {
   type: "delay",
-  message0: "delay:a %1 %2", // figure out how to add option for 2, 3, and 4 arguments to be passed
+  message0: "delay:a %1 %2", 
   inputsInline: true,
   args0: [
     {
@@ -427,7 +425,7 @@ const delay: any = {
 };
 const reverb: any = {
   type: "reverb",
-  message0: "reverb:a %1 %2", // figure out how to add option for 2, 3, 4, 5 and 6 arguments to be passed
+  message0: "reverb:a %1 %2", 
   inputsInline: true,
   args0: [
     {
@@ -447,7 +445,6 @@ const reverb: any = {
 
 // Create the block definitions for the JSON-only blocks.
 // This does not register their definitions with Blockly.
-// This file has no side effects!
 export const blocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   // General
   instrument,
