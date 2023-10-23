@@ -71,10 +71,10 @@ csoundGenerator.forBlock["schedule"] = function (block, generator) {
   const dur = generator.valueToCode(block, "DUR", Order.ATOMIC);
   const pFields = generator.statementToCode(block, "PFIELDS");
   if (!pFields) {
-    const code = `schedule ${instr}, ${start}, ${dur}`;
+    const code = `schedule(${instr}, ${start}, ${dur})`;
     return code;
   } else {
-    const code = `schedule ${instr}, ${start}, ${dur}, ${pFields.trim()}`;
+    const code = `schedule(${instr}, ${start}, ${dur}, ${pFields.trim()})`;
     return code;
   }
 };
@@ -226,7 +226,7 @@ csoundGenerator.forBlock["controls_if"] = function (block, generator) {
 };
 csoundGenerator.forBlock["while_loop"] = function (block, generator) {
   const condition = generator.valueToCode(block, "CONDITION", Order.ATOMIC);
-  const statement = generator.statementToCode(block, "STATEMEENT");
+  const statement = generator.statementToCode(block, "STATEMENT");
   const code = `while ${condition} do
   ${statement}
   od`;
